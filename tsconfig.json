@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "outDir": "out",
+    "noLib": true
+  },
+  "files": [
+    "node_modules/typescript/lib/lib.core.d.ts",
+    "index.d.ts"
+  ]
+}
