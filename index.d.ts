@@ -10,16 +10,16 @@ interface Identifiable {
 /**
  * Objects that implement Iterable can be traversed.
  */
-interface Iterable {
+interface Iterable<T> {
   /**
    * Returns the next object or the first object when on the last one.
    */
-  next(): this;
+  next(): T;
 
   /**
    * Returns the previous object or the last object when on the first one.
    */
-  previous(): this;
+  previous(): T;
 }
 
 
@@ -44,7 +44,8 @@ interface Size {
 /**
  * A 2D-rectangle representation of a Point and Size.
  */
-interface Rectangle extends Point, Size { }
+interface Rectangle extends Point, Size {
+}
 
 
 /**
@@ -145,16 +146,18 @@ interface Modal extends Identifiable {
   close(): void;
 }
 
+interface ModalConstructor {
+  new (): Modal;
+  prototype: Modal;
+}
+
 /**
  * Use the Modal-object to display messages as modal windows.
  */
-declare var Modal: {
-  new (): Modal;
-  prototype: Modal;
-};
+declare var Modal: ModalConstructor;
 
 
-interface CommandObject {
+interface Command {
   /**
    * Executes a UNIX-command in a absolute path with the passed arguments and
    * waits until completion, returns true if the execution was successful.
@@ -164,23 +167,10 @@ interface CommandObject {
 /**
  * Use the Command-object to run UNIX-commands..
  */
-declare var Command: CommandObject;
+declare var Command: Command;
 
 
-interface ScreenObject {
-  /**
-   * Returns the screen containing the window with the keyboard focus.
-   */
-  mainScreen(): Screen;
-
-  /**
-   * Returns all screens, the first screen in this array corresponds to the
-   * primary screen for the system.
-   */
-  screens(): Screen[];
-}
-
-interface Screen extends Identifiable, Iterable {
+interface Screen extends Identifiable, Iterable<Screen> {
   /**
    * Returns the UUID for the screen.
    */
@@ -214,6 +204,21 @@ interface Screen extends Identifiable, Iterable {
   visibleWindows(): Window[];
 }
 
+interface ScreenObject {
+  prototype: Screen;
+
+  /**
+   * Returns the screen containing the window with the keyboard focus.
+   */
+  mainScreen(): Screen;
+
+  /**
+   * Returns all screens, the first screen in this array corresponds to the
+   * primary screen for the system.
+   */
+  screens(): Screen[];
+}
+
 /**
  * Use the Screen-object to access frame sizes and other screens on a
  * multi-screen setup. Get the current screen for a window through the
@@ -223,21 +228,7 @@ interface Screen extends Identifiable, Iterable {
 declare var Screen: ScreenObject;
 
 
-interface SpaceObject {
-  /**
-   * Returns the space containing the window with the keyboard focus (OS X
-   * 10.11+, returns undefined otherwise).
-   */
-  activeSpace(): Space; // OS X 10.11+
-
-  /**
-   * Returns all spaces, the first space in this array corresponds to the
-   * primary space (OS X 10.11+, returns an empty list otherwise).
-   */
-  spaces(): Space[]; // OS X 10.11+
-}
-
-interface Space extends Identifiable, Iterable {
+interface Space extends Identifiable, Iterable<Space> {
   /**
    * Returns true if the space is a normal space.
    */
@@ -274,6 +265,22 @@ interface Space extends Identifiable, Iterable {
   removeWindows(windows: Window[]): void;
 }
 
+interface SpaceObject {
+  prototype: Space;
+
+  /**
+   * Returns the space containing the window with the keyboard focus (OS X
+   * 10.11+, returns undefined otherwise).
+   */
+  activeSpace(): Space; // OS X 10.11+
+
+  /**
+   * Returns all spaces, the first space in this array corresponds to the
+   * primary space (OS X 10.11+, returns an empty list otherwise).
+   */
+  spaces(): Space[]; // OS X 10.11+
+}
+
 /**
  * Use the Space-object to control spaces. These features are only supported on
  * El Capitan (10.11) and upwards. A single window can be in multiple spaces at
@@ -285,7 +292,7 @@ interface Space extends Identifiable, Iterable {
 declare var Space: SpaceObject;
 
 
-interface MouseObject {
+interface Mouse {
   /**
    * Returns the cursor position.
    */
@@ -300,32 +307,8 @@ interface MouseObject {
 /**
  * Use the Mouse-object to control the cursor.
  */
-declare var Mouse: MouseObject;
+declare var Mouse: Mouse;
 
-
-interface AppObject {
-  /**
-   * Returns the running app with the given name, returns undefined if the app
-   * is not currently running.
-   */
-  get(appName: string): App;
-
-  /**
-   * Launches to the background and returns the app with the given name, returns
-   * undefined if unsuccessful.
-   */
-  launch(appName: string): App;
-
-  /**
-   * Returns the focused app.
-   */
-  focusedApp(): App;
-
-  /**
-   * Returns all running apps.
-   */
-  runningApps(): App[];
-}
 
 interface App extends Identifiable {
   /**
@@ -407,6 +390,32 @@ interface App extends Identifiable {
   forceTerminate(): boolean;
 }
 
+interface AppObject {
+  prototype: App;
+
+  /**
+   * Returns the running app with the given name, returns undefined if the app
+   * is not currently running.
+   */
+  get(appName: string): App;
+
+  /**
+   * Launches to the background and returns the app with the given name, returns
+   * undefined if unsuccessful.
+   */
+  launch(appName: string): App;
+
+  /**
+   * Returns the focused app.
+   */
+  focusedApp(): App;
+
+  /**
+   * Returns all running apps.
+   */
+  runningApps(): App[];
+}
+
 /**
  * Use the App-object to control apps. Beware that an app can get stale if you
  * keep a reference to it and it is for instance terminated while you do so, see
@@ -414,27 +423,6 @@ interface App extends Identifiable {
  */
 declare var App: AppObject;
 
-
-interface WindowObject {
-  /**
-   * Returns the focused window for the currently active app, can be undefined
-   * if no window is focused currently.
-   */
-  focusedWindow(): Window;
-  /**
-   * Returns all windows in screens.
-   */
-  windows(): Window[];
-  /**
-   * Returns all visible windows in screens.
-   */
-  visibleWindows(): Window[];
-  /**
-   * Returns all visible windows in the order as they appear on the screen (from
-   * front to back), essentially returning them in the most-recently-used order.
-   */
-  visibleWindowsInOrder(): Window[];
-}
 
 interface Window extends Identifiable {
   /**
@@ -593,6 +581,29 @@ interface Window extends Identifiable {
   focusClosestWindowInSouth(): boolean;
 }
 
+interface WindowObject {
+  prototype: Window;
+
+  /**
+   * Returns the focused window for the currently active app, can be undefined
+   * if no window is focused currently.
+   */
+  focusedWindow(): Window;
+  /**
+   * Returns all windows in screens.
+   */
+  windows(): Window[];
+  /**
+   * Returns all visible windows in screens.
+   */
+  visibleWindows(): Window[];
+  /**
+   * Returns all visible windows in the order as they appear on the screen (from
+   * front to back), essentially returning them in the most-recently-used order.
+   */
+  visibleWindowsInOrder(): Window[];
+}
+
 /**
  * Use the Window-object to control windows. Every screen (i.e. display)
  * combines to form a large rectangle. Every window lives within this rectangle
@@ -606,7 +617,7 @@ interface Window extends Identifiable {
 declare var Window: WindowObject;
 
 
-interface PhoenixObject {
+interface Phoenix {
   /**
    * Manually reloads the context and any changes in the configuration files.
    */
@@ -667,10 +678,10 @@ interface PhoenixObject {
 /**
  * Use the Phoenix-object for API-level tasks.
  */
-declare var Phoenix: PhoenixObject;
+declare var Phoenix: Phoenix;
 
 declare namespace Phoenix {
-  export interface Preferences {
+  interface Preferences {
     /**
      * If set true Phoenix will run completely in the background, this also
      * removes the status bar menu, defaults to false.
@@ -682,32 +693,29 @@ declare namespace Phoenix {
     openAtLogin?: boolean;
   }
 
-  type ScreenEvent = 'screensDidChange';
-  type SpaceEvent = 'spaceDidChange';
-  type AppEvent = 'appDidLaunch' | 'appDidTerminate' | 'appDidActivate'
-    | 'appDidHide' | 'appDidShow';
-  type WindowEvent = 'windowDidOpen' | 'windowDidClose' | 'windowDidFocus'
+  type Event = 'start' | 'screensDidChange' | 'spaceDidChange'
+    | 'appDidLaunch' | 'appDidTerminate' | 'appDidActivate' | 'appDidHide'
+    | 'appDidShow' | 'windowDidOpen' | 'windowDidClose' | 'windowDidFocus'
     | 'windowDidMove' | 'windowDidResize' | 'windowDidMinimize'
     | 'windowDidUnminimize';
 
-  export type Event = 'start' | ScreenEvent | SpaceEvent | AppEvent
-    | WindowEvent;
-
-  export type ModifierKey = 'cmd' | 'alt' | 'ctrl' | 'shift';
-  export type ActionKey = 'return' | 'tab' | 'space' | 'delete' | 'escape'
-    | 'help' | 'home' | 'pageUp' | 'forwardDelete' | 'end' | 'pageDown'
-    | 'left' | 'right' | 'down' | 'up';
-  export type FunctionKey = 'f1' | 'f2' | 'f3' | 'f4' | 'f5' | 'f6' | 'f7'
-    | 'f8' | 'f9' | 'f10' | 'f11' | 'f12' | 'f13' | 'f14' | 'f15' | 'f16'
-    | 'f17' | 'f18' | 'f19';
-  export type KeypadKey = 'keypad.' | 'keypad*' | 'keypad+' | 'keypadClear'
-    | 'keypad/' | 'keypadEnter' | 'keypad-' | 'keypad=' | 'keypad0' | 'keypad1'
-    | 'keypad2' | 'keypad3' | 'keypad4' | 'keypad5' | 'keypad6' | 'keypad7'
-    | 'keypad8' | 'keypad9';
+  type ModifierKey = 'cmd' | 'alt' | 'ctrl' | 'shift';
 
   /**
    * A key can be any key on your local keyboard layout, for instance an
    * å-character if your keyboard has one.
    */
-  export type Key = string | ActionKey | FunctionKey | KeypadKey;
+  type Key = string
+    // Action keys
+    | 'return' | 'tab' | 'space' | 'delete' | 'escape' | 'help' | 'home'
+    | 'pageUp' | 'forwardDelete' | 'end' | 'pageDown' | 'left' | 'right'
+    | 'down' | 'up'
+    // Function keys
+    | 'f1' | 'f2' | 'f3' | 'f4' | 'f5' | 'f6' | 'f7' | 'f8' | 'f9' | 'f10'
+    | 'f11' | 'f12' | 'f13' | 'f14' | 'f15' | 'f16' | 'f17' | 'f18' | 'f19'
+    // Keypad keys
+    | 'keypad.' | 'keypad*' | 'keypad+' | 'keypadClear' | 'keypad/'
+    | 'keypadEnter' | 'keypad-' | 'keypad=' | 'keypad0' | 'keypad1' | 'keypad2'
+    | 'keypad3' | 'keypad4' | 'keypad5' | 'keypad6' | 'keypad7' | 'keypad8'
+    | 'keypad9';
 }
