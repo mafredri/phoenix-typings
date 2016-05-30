@@ -631,7 +631,7 @@ interface Phoenix {
    * only argument, binding overrides any previous handlers for the same key
    * combination.
    */
-  bind(key: Phoenix.Key, modifiers: Phoenix.ModifierKey[], callback: (handler?: any) => void): KeyHandler;
+  bind(key: Phoenix.Key, modifiers: Phoenix.ModifierKey[], callback: (handler: KeyHandler) => void): KeyHandler;
 
   /**
    * Binds an event to a callback function and returns the handler (undefined if
@@ -640,7 +640,7 @@ interface Phoenix {
    * the callback function receives its handler as the last argument, for any
    * additional arguments see events.
    */
-  on(event: Phoenix.Event, callback: (handler?: any) => void): EventHandler;
+  on(event: Phoenix.Event, callback: (target: App | Window | EventHandler, handler: EventHandler) => void): EventHandler;
 
   /**
    * Creates a timer that fires the callback once after the given interval (in
@@ -648,7 +648,7 @@ interface Phoenix {
    * in order for your callback to get called, the callback function receives
    * its handler as the only argument.
    */
-  after(interval: number, callback: (handler?: any) => void): TimerHandler;
+  after(interval: number, callback: (handler: TimerHandler) => void): TimerHandler;
 
   /**
    * Creates a timer that fires the callback repeatedly until stopped using the
@@ -656,7 +656,7 @@ interface Phoenix {
    * reference to the handler in order for your callback to get called, the
    * callback function receives its handler as the only argument.
    */
-  every(interval: number, callback: (handler?: any) => void): TimerHandler;
+  every(interval: number, callback: (handler: TimerHandler) => void): TimerHandler;
 
   /**
    * Sets the preferences from the given key–value map, any previously set
