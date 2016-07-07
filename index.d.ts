@@ -704,6 +704,27 @@ interface TaskConstructor {
   terminate(identifier: number): void;
 }
 
+interface Storage {
+  /**
+   * Stores the value for the key, any previously set value with the same key
+   * will be overridden.
+   */
+  set(key: string, value: any): void;
+
+  /**
+   * Retrieves and returns the value for the key (`undefined` if no value has
+   * been set).
+   */
+  get(key: string): any;
+
+  /**
+   * Removes the key and the value associated with it.
+   */
+  remove(key: string): void;
+}
+
+declare var Storage: Storage;
+
 /**
  * Use the Task-object to access task properties. To terminate a task, release
  * your reference to the handler. Tasks are always reset on context reload.
