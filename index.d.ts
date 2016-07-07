@@ -47,69 +47,6 @@ interface Size {
 interface Rectangle extends Point, Size {
 }
 
-
-/**
- * Use the KeyHandler-object to enable or disable keys. To change a previous
- * handler, bind the key again. A key is disabled automatically when you release
- * your reference to the handler. KeyHandlers are always reset on context
- * reload. Enabling a key combination that has been exclusively registered by
- * another app will fail.
- */
-interface KeyHandler extends Identifiable {
-  /**
-   * Read-only property for the key character in lower case or case sensitive
-   * special key.
-   */
-  key: string;
-
-  /**
-   * Read-only property for the key modifiers in lower case.
-   */
-  modifiers: string[];
-
-  /**
-   * Returns true if the key handler is enabled, by default true.
-   */
-  isEnabled(): boolean;
-
-  /**
-   * Enables the key handler, returns true if successful.
-   */
-  enable(): boolean;
-
-  /**
-   * Disables the key handler, returns true if successful.
-   */
-  disable(): boolean;
-}
-
-
-/**
- * Use the EventHandler-object to access event properties. You can have multiple
- * handlers for a single event. To disable an event, release your reference to
- * the handler. EventHandlers are always reset on context reload.
- */
-interface EventHandler extends Identifiable {
-  /**
-   * Read-only property for the event name.
-   */
-  name: string;
-}
-
-
-/**
- * Use the TimerHandler-object to control timers. A timer can fire only once or
- * be repeating. To release a timer, release your reference to the handler.
- * TimerHandlers are always reset on context reload.
- */
-interface TimerHandler extends Identifiable {
-  /**
-   * Stops the timer immediately.
-   */
-  stop(): void;
-}
-
-
 interface Modal extends Identifiable {
   /**
    * Poperty for the origin for the modal, the enclosed properties are read-only
@@ -155,20 +92,6 @@ interface ModalConstructor {
  * Use the Modal-object to display messages as modal windows.
  */
 declare var Modal: ModalConstructor;
-
-
-interface Command {
-  /**
-   * Executes a UNIX-command in a absolute path with the passed arguments and
-   * waits until completion, returns true if the execution was successful.
-   */
-  run(path: string, args: string[]): boolean;
-}
-/**
- * Use the Command-object to run UNIX-commands..
- */
-declare var Command: Command;
-
 
 interface Screen extends Identifiable, Iterable<Screen> {
   /**
@@ -616,47 +539,183 @@ interface WindowObject {
  */
 declare var Window: WindowObject;
 
+interface Key extends Identifiable {
+  /**
+   * Read-only property for the key character in lower case or case sensitive
+   * special key.
+   */
+  key: string;
+
+  /**
+   * Read-only property for the key modifiers in lower case.
+   */
+  modifiers: string[];
+
+  /**
+   * Returns true if the key handler is enabled, by default true.
+   */
+  isEnabled(): boolean;
+
+  /**
+   * Enables the key handler, any previous handler for the same key combination
+   * will automatically be disabled, returns true if successful.
+   */
+  enable(): boolean;
+
+  /**
+   * Disables the key handler, returns true if successful.
+   */
+  disable(): boolean;
+}
+
+interface KeyConstructor {
+  /**
+   * Constructs and binds the key character with the specified modifiers (can be
+   * an empty list) to a callback function and returns the handler (undefined if
+   * not supported), you must keep a reference to the handler in order for your
+   * callback to get called, you can have multiple handlers for a single key
+   * combination, however only one can be enabled at a time, any previous
+   * handler for the same key combination will automatically be disabled, the
+   * callback function receives its handler as the only argument.
+   */
+  new (key: Phoenix.Key, modifiers: Phoenix.ModifierKey[], callback: (handler: Key) => void): Key;
+  prototype: Key;
+
+  /**
+   * Constructs a managed handler for a key and returns the identifier for the
+   * handler.
+   */
+  on(key: Phoenix.Key, modifiers: Phoenix.ModifierKey[], callback: (handler: Key) => void): number;
+  /**
+   * Disables the managed handler for a key with the given identifier.
+   */
+  off(identifier: number): void;
+}
+
+/**
+ * Use the Key-object to enable or disable keys. You can have multiple handlers
+ * for a single key combination, however only one can be enabled at a time. A
+ * key is disabled automatically when you release your reference to the handler.
+ * Keys are always reset on context reload. Enabling a key combination that has
+ * been exclusively registered by another app will fail.
+ */
+declare var Key: KeyConstructor;
+
+interface Event extends Identifiable {
+  /**
+   * Read-only property for the event name.
+   */
+  name: string;
+}
+
+interface EventConstructor {
+  /**
+   * Constructs and binds an event to a callback function and returns the
+   * handler (undefined if not supported), you must keep a reference to the
+   * handler in order for your callback to get called, you can have multiple
+   * handlers for a single event, the callback function receives its handler as
+   * the last argument, for any additional arguments see events
+   */
+  new (event: Phoenix.Event, callback: (target: App | Window | Event, handler: Event) => void): Event;
+  prototype: Event;
+
+  /**
+   * Constructs a managed handler for an event and returns the identifier for
+   * the handler.
+   */
+  on(event: Phoenix.Event, callback: (target: App | Window | Event, handler: Event) => void): number;
+  /**
+   * Disables the managed handler for an event with the given identifier.
+   */
+  off(identifier: number): void;
+}
+
+/**
+ * Use the Event-object to access event properties. You can have multiple
+ * handlers for a single event. To disable an event, release your reference to
+ * the handler. Events are always reset on context reload.
+ */
+declare var Event: EventConstructor;
+
+interface Timer extends Identifiable {
+  /**
+   * Stops the timer immediately.
+   */
+  stop(): void;
+}
+
+interface TimerConstructor {
+  /**
+   * Constructs a timer that fires the callback once or repeatedly until stopped
+   * with the given interval (in seconds) and returns the handler, you must keep
+   * a reference to the handler in order for your callback to get called, the
+   * callback function receives its handler as the only argument.
+   */
+  new (interval: number, callback: (handler: Timer) => void): Timer;
+  prototype: Timer;
+
+  /**
+   * Constructs a managed handler for a timer that fires only once and returns
+   * the identifier for the handler.
+   */
+  after(interval: number, callback: (handler: Timer) => void): number;
+  /**
+   * Constructs a managed handler for a timer that fires repeatedly and returns
+   * the identifier for the handler.
+   */
+  every(interval: number, callback: (handler: Timer) => void): number;
+  /**
+   * Disables the managed handler for a timer with the given identifier.
+   */
+  off(identifier: number): void;
+}
+
+declare var Timer: TimerConstructor;
+
+interface Task extends Identifiable {
+  /**
+   * Read-only property for the termination status.
+   */
+  status: number;
+  /**
+   * Read-only property for the standard output.
+   */
+  output: string;
+  /**
+   * Read-only property for the standard error.
+   */
+  error: string;
+}
+
+interface TaskConstructor {
+  /**
+   * Constructs a task that asynchronously executes.
+   */
+  new (path: string, args: string[], callback?: (task: Task) => void): Task;
+  prototype: Task;
+
+  /**
+   * Constructs a managed handler for a task and returns the identifier.
+   */
+  run(path: string, args: string[], callback?: (task: Task) => void): number;
+  /**
+   * Terminates the managed handler for a task with the given identifier.
+   */
+  terminate(identifier: number): void;
+}
+
+/**
+ * Use the Task-object to access task properties. To terminate a task, release
+ * your reference to the handler. Tasks are always reset on context reload.
+ * Beware that some task properties are only set after the task has completed.
+ */
+declare var Task: TaskConstructor;
 
 interface Phoenix {
   /**
    * Manually reloads the context and any changes in the configuration files.
    */
   reload(): void;
-
-  /**
-   * Binds the key character with the specified modifiers (can be an empty list)
-   * to a callback function and returns the handler (undefined if not
-   * supported), you must keep a reference to the handler in order for your
-   * callback to get called, the callback function receives its handler as the
-   * only argument, binding overrides any previous handlers for the same key
-   * combination.
-   */
-  bind(key: Phoenix.Key, modifiers: Phoenix.ModifierKey[], callback: (handler: KeyHandler) => void): KeyHandler;
-
-  /**
-   * Binds an event to a callback function and returns the handler (undefined if
-   * not supported), you must keep a reference to the handler in order for your
-   * callback to get called, you can have multiple handlers for a single event,
-   * the callback function receives its handler as the last argument, for any
-   * additional arguments see events.
-   */
-  on(event: Phoenix.Event, callback: (target: App | Window | EventHandler, handler: EventHandler) => void): EventHandler;
-
-  /**
-   * Creates a timer that fires the callback once after the given interval (in
-   * seconds) and returns the handler, you must keep a reference to the handler
-   * in order for your callback to get called, the callback function receives
-   * its handler as the only argument.
-   */
-  after(interval: number, callback: (handler: TimerHandler) => void): TimerHandler;
-
-  /**
-   * Creates a timer that fires the callback repeatedly until stopped using the
-   * given interval (in seconds) and returns the handler, you must keep a
-   * reference to the handler in order for your callback to get called, the
-   * callback function receives its handler as the only argument.
-   */
-  every(interval: number, callback: (handler: TimerHandler) => void): TimerHandler;
 
   /**
    * Sets the preferences from the given key–value map, any previously set
