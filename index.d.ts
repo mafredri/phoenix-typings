@@ -117,14 +117,9 @@ interface Screen extends Identifiable, Iterable<Screen> {
   spaces(): Space[]; // OS X 10.11+
 
   /**
-   * Returns all windows for the screen.
+   * Returns all windows for the screen if no optionals are given.
    */
-  windows(): Window[];
-
-  /**
-   * Returns all visible windows for the screen.
-   */
-  visibleWindows(): Window[];
+  windows(optionals?: { visible?: boolean }): Window[];
 }
 
 interface ScreenObject {
@@ -133,13 +128,13 @@ interface ScreenObject {
   /**
    * Returns the screen containing the window with the keyboard focus.
    */
-  mainScreen(): Screen;
+  main(): Screen;
 
   /**
    * Returns all screens, the first screen in this array corresponds to the
    * primary screen for the system.
    */
-  screens(): Screen[];
+  all(): Screen[];
 }
 
 /**
@@ -149,7 +144,6 @@ interface ScreenObject {
  * it and it is for instance disconnected while you do so.
  */
 declare var Screen: ScreenObject;
-
 
 interface Space extends Identifiable, Iterable<Space> {
   /**
@@ -168,14 +162,9 @@ interface Space extends Identifiable, Iterable<Space> {
   screen(): Screen;
 
   /**
-   * Returns all windows for the space.
+   * Returns all windows for the space if no optionals are given.
    */
-  windows(): Window[];
-
-  /**
-   * Returns all visible windows for the space.
-   */
-  visibleWindows(): Window[];
+  windows(optionals? : { visible?: boolean }): Window[];
 
   /**
    * Adds the given windows to the space.
@@ -195,13 +184,13 @@ interface SpaceObject {
    * Returns the space containing the window with the keyboard focus (OS X
    * 10.11+, returns undefined otherwise).
    */
-  activeSpace(): Space; // OS X 10.11+
+  active(): Space; // OS X 10.11+
 
   /**
    * Returns all spaces, the first space in this array corresponds to the
    * primary space (OS X 10.11+, returns an empty list otherwise).
    */
-  spaces(): Space[]; // OS X 10.11+
+  all(): Space[]; // OS X 10.11+
 }
 
 /**
@@ -271,14 +260,9 @@ interface App extends Identifiable {
   mainWindow(): Window;
 
   /**
-   * Returns all windows for the app.
+   * Returns all windows for the app if no optionals are given.
    */
-  windows(): Window[];
-
-  /**
-   * Returns all visible windows for the app.
-   */
-  visibleWindows(): Window[];
+  windows(optionals?: { visible: boolean }): Window[];
 
   /**
    * Activates the app and brings its windows forward, returns true if
@@ -305,12 +289,7 @@ interface App extends Identifiable {
   /**
    * Terminates the app, returns true if successful.
    */
-  terminate(): boolean;
-
-  /**
-   * Force terminates the app, returns true if successful.
-   */
-  forceTerminate(): boolean;
+  terminate(optionals?: { force?: boolean }): boolean;
 }
 
 interface AppObject {
@@ -331,12 +310,12 @@ interface AppObject {
   /**
    * Returns the focused app.
    */
-  focusedApp(): App;
+  focused(): App;
 
   /**
    * Returns all running apps.
    */
-  runningApps(): App[];
+  all(): App[];
 }
 
 /**
@@ -349,14 +328,9 @@ declare var App: AppObject;
 
 interface Window extends Identifiable {
   /**
-   * Returns all other windows on the same screen as the window.
+   * Returns all other windows on all screens if no optionals are given.
    */
-  otherWindowsOnSameScreen(): Window[];
-
-  /**
-   * Returns all other windows on all screens.
-   */
-  otherWindowsOnAllScreens(): Window[];
+  others(optionals?: { screen?: Screen }): Window[];
 
   /**
    * Returns the title for the window.
@@ -457,24 +431,9 @@ interface Window extends Identifiable {
   unminimize(): boolean;
 
   /**
-   * Returns windows to the west of the window.
+   * Returns windows to the direction of the window.
    */
-  windowsToWest(): Window[];
-
-  /**
-   * Returns windows to the east of the window.
-   */
-  windowsToEast(): Window[];
-
-  /**
-   * Returns windows to the north the window.
-   */
-  windowsToNorth(): Window[];
-
-  /**
-   * Returns windows to the south the window.
-   */
-  windowsToSouth(): Window[];
+  neighbors(direction: Phoenix.Direction): Window[];
 
   /**
    * Focuses the window, returns true if successful.
@@ -482,26 +441,10 @@ interface Window extends Identifiable {
   focus(): boolean;
 
   /**
-   * Focuses the closest window to the west of the window, returns true if
-   * successful.
+   * Focuses the closest window to the direction of the window, returns `true`
+   * if successful.
    */
-  focusClosestWindowInWest(): boolean;
-
-  /**
-   * Focuses the closest window to the east of the window, returns true if
-   * successful.
-   */
-  focusClosestWindowInEast(): boolean;
-  /**
-   * Focuses the closest window to the north of the window, returns true if
-   * successful.
-   */
-  focusClosestWindowInNorth(): boolean;
-  /**
-   * Focuses the closest window to the south of the window, returns true if
-   * successful.
-   */
-  focusClosestWindowInSouth(): boolean;
+  focusClosestNeighbor(direction: Phoenix.Direction): boolean;
 }
 
 interface WindowObject {
@@ -511,20 +454,16 @@ interface WindowObject {
    * Returns the focused window for the currently active app, can be undefined
    * if no window is focused currently.
    */
-  focusedWindow(): Window;
+  focused(): Window;
   /**
-   * Returns all windows in screens.
+   * Returns all windows in screens if no optionals are given.
    */
-  windows(): Window[];
-  /**
-   * Returns all visible windows in screens.
-   */
-  visibleWindows(): Window[];
+  all(optionals?: { visible?: boolean }): Window[];
   /**
    * Returns all visible windows in the order as they appear on the screen (from
    * front to back), essentially returning them in the most-recently-used order.
    */
-  visibleWindowsInOrder(): Window[];
+  recent(): Window[];
 }
 
 /**
@@ -772,6 +711,8 @@ declare namespace Phoenix {
      */
     openAtLogin?: boolean;
   }
+
+  type Direction = 'west' | 'east' | 'north' | 'south';
 
   type Event = 'start' | 'screensDidChange' | 'spaceDidChange'
     | 'appDidLaunch' | 'appDidTerminate' | 'appDidActivate' | 'appDidHide'
