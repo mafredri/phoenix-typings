@@ -643,6 +643,14 @@ interface TaskConstructor {
   terminate(identifier: number): void;
 }
 
+/**
+ * Use the Task-object to access task properties. To terminate a task, release
+ * your reference to the handler. Tasks are always reset on context reload.
+ * Beware that some task properties are only set after the task has completed.
+ */
+declare var Task: TaskConstructor;
+
+
 interface Storage {
   /**
    * Stores the value for the key, any previously set value with the same key
@@ -664,12 +672,6 @@ interface Storage {
 
 declare var Storage: Storage;
 
-/**
- * Use the Task-object to access task properties. To terminate a task, release
- * your reference to the handler. Tasks are always reset on context reload.
- * Beware that some task properties are only set after the task has completed.
- */
-declare var Task: TaskConstructor;
 
 interface Phoenix {
   /**
