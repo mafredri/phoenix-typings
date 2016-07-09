@@ -47,6 +47,7 @@ interface Size {
 interface Rectangle extends Point, Size {
 }
 
+
 interface Modal extends Identifiable {
   /**
    * Poperty for the origin for the modal, the enclosed properties are read-only
@@ -144,6 +145,7 @@ interface ScreenObject {
  * it and it is for instance disconnected while you do so.
  */
 declare var Screen: ScreenObject;
+
 
 interface Space extends Identifiable, Iterable<Space> {
   /**
@@ -478,6 +480,7 @@ interface WindowObject {
  */
 declare var Window: WindowObject;
 
+
 interface Key extends Identifiable {
   /**
    * Read-only property for the key character in lower case or case sensitive
@@ -540,6 +543,7 @@ interface KeyConstructor {
  */
 declare var Key: KeyConstructor;
 
+
 interface Event extends Identifiable {
   /**
    * Read-only property for the event name.
@@ -576,6 +580,7 @@ interface EventConstructor {
  */
 declare var Event: EventConstructor;
 
+
 interface Timer extends Identifiable {
   /**
    * Stops the timer immediately.
@@ -610,6 +615,7 @@ interface TimerConstructor {
 }
 
 declare var Timer: TimerConstructor;
+
 
 interface Task extends Identifiable {
   /**
@@ -700,6 +706,7 @@ interface Phoenix {
  * Use the Phoenix-object for API-level tasks.
  */
 declare var Phoenix: Phoenix;
+
 
 declare namespace Phoenix {
   interface Preferences {
