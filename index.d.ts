@@ -330,7 +330,7 @@ interface Window extends Identifiable {
   /**
    * Returns all other windows on all screens if no optionals are given.
    */
-  others(optionals?: { screen?: Screen }): Window[];
+  others(optionals?: { screen?: Screen, visible?: boolean }): Window[];
 
   /**
    * Returns the title for the window.
