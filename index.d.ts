@@ -215,7 +215,7 @@ interface Mouse {
   /**
    * Moves the cursor to a given position, returns true if successful.
    */
-  moveTo(point: Point): boolean;
+  move(point: Point): boolean;
 }
 
 /**
