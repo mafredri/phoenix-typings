@@ -43,8 +43,7 @@ interface Size {
 /**
  * A 2D-rectangle representation of a Point and Size.
  */
-interface Rectangle extends Point, Size {
-}
+interface Rectangle extends Point, Size { }
 
 interface Modal extends Phoenix.ModalProperties, Identifiable {
   /**
@@ -172,7 +171,7 @@ interface Space extends Identifiable, Iterable<Space> {
   /**
    * Returns all windows for the space if no optionals are given.
    */
-  windows(optionals? : { visible?: boolean }): Window[];
+  windows(optionals?: { visible?: boolean }): Window[];
 
   /**
    * Adds the given windows to the space.
@@ -732,7 +731,7 @@ declare namespace Phoenix {
     openAtLogin?: boolean;
   }
 
-  interface Icon {}
+  interface Icon { }
 
   interface ModalProperties {
     /**
