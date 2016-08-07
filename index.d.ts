@@ -6,7 +6,6 @@ interface Identifiable {
   isEqual(object: Object): boolean;
 }
 
-
 /**
  * Objects that implement Iterable can be traversed.
  */
@@ -740,31 +739,31 @@ declare namespace Phoenix {
      * Property for the duration (in seconds) for the modal, if the duration is
      * set to 0 the modal will remain open until closed, by default 0.
      */
-    duration: number;
+    duration?: number;
 
     /**
      * Dynamic property for the weight of the modal (in points), by default `24`.
      */
-    weight: number;
+    weight?: number;
 
     /**
      * Property for the appearance of the modal, by default `dark`.
      */
-    appearance: 'dark' | 'light' | 'transparent';
+    appearance?: 'dark' | 'light' | 'transparent';
 
     /**
      * Dynamic property for the icon displayed in the modal.
      */
-    icon: Phoenix.Icon;
+    icon?: Phoenix.Icon;
 
     /**
      * Dynamic property for the text displayed in the modal.
      */
-    text: string;
+    text?: string;
   }
 
   interface ModalBuilder extends ModalProperties {
-    origin(frame: Rectangle): void;
+    origin(frame: Rectangle): Point;
   }
 
   type Direction = 'west' | 'east' | 'north' | 'south';
