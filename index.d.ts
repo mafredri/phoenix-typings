@@ -530,14 +530,14 @@ interface KeyConstructor {
    * handler for the same key combination will automatically be disabled, the
    * callback function receives its handler as the only argument.
    */
-  new (key: Phoenix.Key, modifiers: Phoenix.ModifierKey[], callback: (handler: Key, repeated: boolean) => void): Key;
+  new (key: Phoenix.KeyIdentifier, modifiers: Phoenix.ModifierKey[], callback: Phoenix.KeyCallback): Key;
   prototype: Key;
 
   /**
    * Constructs a managed handler for a key and returns the identifier for the
    * handler.
    */
-  on(key: Phoenix.Key, modifiers: Phoenix.ModifierKey[], callback: (handler: Key, repeated: boolean) => void): number;
+  on(key: Phoenix.KeyIdentifier, modifiers: Phoenix.ModifierKey[], callback: Phoenix.KeyCallback): number;
   /**
    * Disables the managed handler for a key with the given identifier.
    */
@@ -779,7 +779,7 @@ declare namespace Phoenix {
    * A key can be any key on your local keyboard layout, for instance an
    * å-character if your keyboard has one.
    */
-  type Key = string
+  type KeyIdentifier = string
     // Action keys
     | 'return' | 'tab' | 'space' | 'delete' | 'escape' | 'help' | 'home'
     | 'pageUp' | 'forwardDelete' | 'end' | 'pageDown' | 'left' | 'right'
@@ -792,4 +792,6 @@ declare namespace Phoenix {
     | 'keypadEnter' | 'keypad-' | 'keypad=' | 'keypad0' | 'keypad1' | 'keypad2'
     | 'keypad3' | 'keypad4' | 'keypad5' | 'keypad6' | 'keypad7' | 'keypad8'
     | 'keypad9';
+
+    type KeyCallback = (handler: Key, repeated: boolean) => void;
 }
