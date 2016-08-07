@@ -47,25 +47,13 @@ interface Size {
 interface Rectangle extends Point, Size {
 }
 
-
-interface Modal extends Identifiable {
+interface Modal extends Phoenix.ModalProperties, Identifiable {
   /**
-   * Poperty for the origin for the modal, the enclosed properties are read-only
-   * so you must pass an object for this property, by default (0, 0).
+   * Dynamic property for the origin of the modal, the enclosed properties are
+   * read-only so you must pass an object for this property, bottom-left based
+   * origin, by default `(0, 0)`.
    */
   origin: Point;
-
-  /**
-   * Property for the duration (in seconds) for the modal, if the duration is
-   * set to 0 the modal will remain open until closed, by default 0.
-   */
-  duration: number;
-
-  /**
-   * Property for the message for the modal, required for the modal to be
-   * displayed.
-   */
-  message: string;
 
   /**
    * Returns the frame for the modal, the frame is adjusted for the current
@@ -87,6 +75,8 @@ interface Modal extends Identifiable {
 interface ModalConstructor {
   new (): Modal;
   prototype: Modal;
+
+  build(properties: Phoenix.ModalBuilder): Modal;
 }
 
 /**
@@ -101,15 +91,32 @@ interface Screen extends Identifiable, Iterable<Screen> {
   identifier(): string;
 
   /**
-   * Returns the whole frame for the screen.
+   * Returns the whole frame for the screen, bottom-left based origin.
    */
-  frameInRectangle(): Rectangle;
+  frame(): Rectangle;
 
   /**
    * Returns the visible frame for the screen subtracting the Dock and Menu from
-   * the frame when visible.
+   * the frame when visible, bottom-left based origin.
    */
-  visibleFrameInRectangle(): Rectangle;
+  visibleFrame(): Rectangle;
+
+  /**
+   * Returns the whole frame for the screen, top-left based origin.
+   */
+  flippedFrame(): Rectangle;
+
+  /**
+   * Returns the visible frame for the screen subtracting the Dock and Menu from
+   * the frame when visible, top-left based origin.
+   */
+  flippedVisibleFrame(): Rectangle;
+
+  /**
+   * Returns the current space for the screen (macOS 10.11+, returns `undefined`
+   * otherwise).
+   */
+  currentSpace(): Space;
 
   /**
    * Returns all spaces for the screen (OS X 10.11+, returns an empty list
@@ -240,6 +247,11 @@ interface App extends Identifiable {
    * Returns the name for the app.
    */
   name(): string;
+
+  /**
+   * Returns the app icon.
+   */
+  icon(): Phoenix.Icon;
 
   /**
    * Returns true if the app is currently frontmost.
@@ -520,14 +532,14 @@ interface KeyConstructor {
    * handler for the same key combination will automatically be disabled, the
    * callback function receives its handler as the only argument.
    */
-  new (key: Phoenix.Key, modifiers: Phoenix.ModifierKey[], callback: (handler: Key) => void): Key;
+  new (key: Phoenix.Key, modifiers: Phoenix.ModifierKey[], callback: (handler: Key, repeated: boolean) => void): Key;
   prototype: Key;
 
   /**
    * Constructs a managed handler for a key and returns the identifier for the
    * handler.
    */
-  on(key: Phoenix.Key, modifiers: Phoenix.ModifierKey[], callback: (handler: Key) => void): number;
+  on(key: Phoenix.Key, modifiers: Phoenix.ModifierKey[], callback: (handler: Key, repeated: boolean) => void): number;
   /**
    * Disables the managed handler for a key with the given identifier.
    */
@@ -559,14 +571,14 @@ interface EventConstructor {
    * handlers for a single event, the callback function receives its handler as
    * the last argument, for any additional arguments see events
    */
-  new (event: Phoenix.Event, callback: (target: App | Window | Event, handler: Event) => void): Event;
+  new (event: Phoenix.Event, callback: (target: App | Window | Point | Event, handler: Event) => void): Event;
   prototype: Event;
 
   /**
    * Constructs a managed handler for an event and returns the identifier for
    * the handler.
    */
-  on(event: Phoenix.Event, callback: (target: App | Window | Event, handler: Event) => void): number;
+  on(event: Phoenix.Event, callback: (target: App | Window | Point | Event, handler: Event) => void): number;
   /**
    * Disables the managed handler for an event with the given identifier.
    */
@@ -719,6 +731,40 @@ declare namespace Phoenix {
      * If set true Phoenix will automatically open at login, defaults to false.
      */
     openAtLogin?: boolean;
+  }
+
+  interface Icon {}
+
+  interface ModalProperties {
+    /**
+     * Property for the duration (in seconds) for the modal, if the duration is
+     * set to 0 the modal will remain open until closed, by default 0.
+     */
+    duration: number;
+
+    /**
+     * Dynamic property for the weight of the modal (in points), by default `24`.
+     */
+    weight: number;
+
+    /**
+     * Property for the appearance of the modal, by default `dark`.
+     */
+    appearance: 'dark' | 'light' | 'transparent';
+
+    /**
+     * Dynamic property for the icon displayed in the modal.
+     */
+    icon: Phoenix.Icon;
+
+    /**
+     * Dynamic property for the text displayed in the modal.
+     */
+    text: string;
+  }
+
+  interface ModalBuilder extends ModalProperties {
+    origin(frame: Rectangle): void;
   }
 
   type Direction = 'west' | 'east' | 'north' | 'south';
