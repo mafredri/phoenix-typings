@@ -448,6 +448,12 @@ interface Window extends Identifiable {
   neighbors(direction: Phoenix.Direction): Window[];
 
   /**
+   * Raises the window so it will be beneath the focused window, returns `true`
+   * if successful.
+   */
+  raise(): boolean;
+
+  /**
    * Focuses the window, returns true if successful.
    */
   focus(): boolean;
