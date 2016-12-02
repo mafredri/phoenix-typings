@@ -3,10 +3,11 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "outDir": "out",
-    "noLib": true
+    "lib": [
+      "es2015.core"
+    ]
   },
   "files": [
-    "node_modules/typescript/lib/lib.core.d.ts",
     "index.d.ts"
   ]
 }

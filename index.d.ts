@@ -799,5 +799,5 @@ declare namespace Phoenix {
     | 'keypad3' | 'keypad4' | 'keypad5' | 'keypad6' | 'keypad7' | 'keypad8'
     | 'keypad9';
 
-    type KeyCallback = (handler: Key, repeated: boolean) => void;
+  type KeyCallback = (handler: Key, repeated: boolean) => void;
 }
