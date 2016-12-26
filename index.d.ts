@@ -164,9 +164,9 @@ interface Space extends Identifiable, Iterable<Space> {
   isFullScreen(): boolean;
 
   /**
-   * Returns the screen to which the space belongs to.
+   * Returns all screens to which the space belongs to.
    */
-  screen(): Screen;
+  screens(): Screen[];
 
   /**
    * Returns all windows for the space if no optionals are given.
@@ -710,7 +710,7 @@ interface Phoenix {
   /**
    * Logs the message to the console.
    */
-  log(message: any): void;
+  log(...message: any[]): void;
 
   /**
    * Delivers the message to the Notification Center.
