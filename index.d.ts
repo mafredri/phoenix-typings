@@ -773,11 +773,14 @@ declare namespace Phoenix {
 
   type Direction = 'west' | 'east' | 'north' | 'south';
 
-  type Event = 'start' | 'screensDidChange' | 'spaceDidChange'
-    | 'appDidLaunch' | 'appDidTerminate' | 'appDidActivate' | 'appDidHide'
-    | 'appDidShow' | 'windowDidOpen' | 'windowDidClose' | 'windowDidFocus'
-    | 'windowDidMove' | 'windowDidResize' | 'windowDidMinimize'
-    | 'windowDidUnminimize';
+  type Event =
+    'didLaunch' | 'willTerminate' |
+    'screensDidChange' |
+    'spaceDidChange' |
+    'mouseDidMove' | 'mouseDidMove' | 'mouseDidLeftClick' | 'mouseDidRightClick' | 'mouseDidLeftDrag' | 'mouseDidRightDrag' |
+    'appDidLaunch' | 'appDidTerminate' | 'appDidActivate' | 'appDidHide' | 'appDidShow' |
+    'windowDidOpen' | 'windowDidClose' | 'windowDidFocus' | 'windowDidMove' | 'windowDidResize' | 'windowDidMinimize' | 'windowDidUnminimize' |
+    'windowDidMinimise' | 'windowDidUnminimise';
 
   type ModifierKey = 'cmd' | 'alt' | 'ctrl' | 'shift';
 
