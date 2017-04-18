@@ -472,7 +472,14 @@ interface WindowObject {
    * Returns the focused window for the currently active app, can be undefined
    * if no window is focused currently.
    */
-  focused(): Window;
+  focused(): Window | undefined;
+
+  /**
+   * Returns the topmost window at the specified point, can be undefined if no
+   * window is present at the given position.
+   */
+  at(point: Point): Window | undefined;
+
   /**
    * Returns all windows in screens if no optionals are given.
    */
