@@ -1,18 +1,22 @@
 {
-  "private": true,
-  "scripts": {
-    "build": "echo building... && typings bundle --ambient -o out",
-    "lint": "echo linting... && tslint \"**/*.ts\" -e \"out/**\" -e \"node_modules/**\" -e \"typings/**\"",
-    "watch": "onchange \"**/*.ts\" -i -e \"out/**\" -- npm -s run build",
-    "publish": "npm -s run lint+build && echo please publish to typings/registry",
-    "lint+build": "npm run lint && npm run build",
-    "prepublish": "typings install"
+  "name": "phoenix-typings",
+  "version": "1.0.0",
+  "license": "MIT",
+  "author": {
+    "name": "Mathias Fredriksson",
+    "email": "mafredri@gmail.com",
+    "url": "mathias.fi"
   },
+  "main": "",
+  "repository": "mafredri/phoenix-typings",
+  "typings": "index.d.ts",
+  "scripts": {},
   "devDependencies": {
-    "onchange": "^2.2.0",
-    "tslint": "^4.0.0-dev.3",
+    "onchange": "^3.2.1",
+    "tslint": "^5.1.0",
     "tslint-config-typings": "^0.3.1",
-    "typescript": "^2.0.10",
-    "typings": "^2.0.0"
-  }
+    "typescript": "^2.2.2",
+    "typings": "^2.1.1"
+  },
+  "typeScriptVersion": "2.0"
 }
