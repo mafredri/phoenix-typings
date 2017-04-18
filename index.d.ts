@@ -114,7 +114,7 @@ interface Screen extends Identifiable, Iterable<Screen> {
    * Returns the current space for the screen (macOS 10.11+, returns `undefined`
    * otherwise).
    */
-  currentSpace(): Space;
+  currentSpace(): Space | undefined;
 
   /**
    * Returns all spaces for the screen (OS X 10.11+, returns an empty list
@@ -191,7 +191,7 @@ interface SpaceObject {
    * Returns the space containing the window with the keyboard focus (OS X
    * 10.11+, returns undefined otherwise).
    */
-  active(): Space; // OS X 10.11+
+  active(): Space | undefined; // OS X 10.11+
 
   /**
    * Returns all spaces, the first space in this array corresponds to the
@@ -311,13 +311,13 @@ interface AppObject {
    * Returns the running app with the given name, returns undefined if the app
    * is not currently running.
    */
-  get(appName: string): App;
+  get(appName: string): App | undefined;
 
   /**
    * Launches to the background and returns the app with the given name, returns
    * undefined if unsuccessful.
    */
-  launch(appName: string): App;
+  launch(appName: string): App | undefined;
 
   /**
    * Returns the focused app.
@@ -543,7 +543,7 @@ interface KeyConstructor {
    * handler for the same key combination will automatically be disabled, the
    * callback function receives its handler as the only argument.
    */
-  new (key: Phoenix.KeyIdentifier, modifiers: Phoenix.ModifierKey[], callback: Phoenix.KeyCallback): Key;
+  new (key: Phoenix.KeyIdentifier, modifiers: Phoenix.ModifierKey[], callback: Phoenix.KeyCallback): Key | undefined;
   prototype: Key;
 
   /**
@@ -582,7 +582,7 @@ interface EventConstructor {
    * handlers for a single event, the callback function receives its handler as
    * the last argument, for any additional arguments see events
    */
-  new (event: Phoenix.Event, callback: (target: App | Window | Point | Event, handler: Event) => void): Event;
+  new (event: Phoenix.Event, callback: (target: App | Window | Point | Event, handler: Event) => void): Event | undefined;
   prototype: Event;
 
   /**
@@ -691,7 +691,7 @@ interface Storage {
    * Retrieves and returns the value for the key (`undefined` if no value has
    * been set).
    */
-  get(key: string): any;
+  get(key: string): any | undefined;
 
   /**
    * Removes the key and the value associated with it.
