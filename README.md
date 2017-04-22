@@ -5,19 +5,15 @@
 ## Installing
 
 ```
-npm install -g typescript typings tslint
-
 # Inside project
-npm install --save typescript typings tslint
-typings init
-typings install github:mafredri/phoenix-typings --ambient --save
+npm install --save typescript typings
+./node_modules/.bin/typings init
+./node_modules/.bin/typings install github:mafredri/phoenix-typings --global --save
 ```
 
 ## Using
 
-Typings for the DOM conflict with these typings, this means you will want to ignore `lib.dom.d.ts` (`lib.d.ts` includes `lib.dom.d.ts` which makes it unsuitable as well).
-
-Do this by using the `compilerOptions/noLib` property and explicitly specifying which `files` to include in your `tsconfig.json`.
+Once `phoenix-typings` has been installed they are ready to be used with a correctly configued `tsconfig.json`. Care should be taken not to enable the TypeScript DOM library.
 
 Here's a simple example `tsconfig.json`:
 
@@ -27,19 +23,17 @@ Here's a simple example `tsconfig.json`:
     "module": "commonjs",
     "moduleResolution": "node",
     "outDir": "out",
-    "noLib": true,
-    "target": "es5"
+    "target": "es5",
+    "lib": [
+      "es2017"
+    ]
   },
   "files": [
-    "node_modules/typescript/lib/lib.core.es7.d.ts",
-    "typings/main.d.ts",
-    "phoenix.ts"
+    "typings/index.d.ts",
+    "src/phoenix.d.ts",
+    "src/phoenix.ts"
   ]
 }
 ```
 
-**NOTE:** Using imports will *require* (pun intended) some workarounds, see [loader.js](https://github.com/mafredri/phoenix-config/blob/fd1e123787e334301a9279f6484b8d144882f2a1/src/js/loader.js) and [tsconfig.js](https://github.com/mafredri/phoenix-config/blob/fd1e123787e334301a9279f6484b8d144882f2a1/tsconfig.json) for an example of using AMD-style modules.
-
-## License
-
-The MIT License.
+**NOTE:** Phoenix does not support CommonJS type of `require`. In order to use `require` or ES2015 style `import`, webpack is highly recommended. For an example on how to set up webpack, see [mafredri/phoenix-config](https://github.com/mafredri/phoenix-config) with it's [`webpack.config.js`](https://github.com/mafredri/phoenix-config/blob/4c8fdb07174fddf84426d6fd2a3f11add9ae918d/webpack.config.js) and [`tsconfig.json`](https://github.com/mafredri/phoenix-config/blob/4c8fdb07174fddf84426d6fd2a3f11add9ae918d/tsconfig.json)
