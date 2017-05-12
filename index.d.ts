@@ -1,28 +1,4 @@
 /**
- * Objects that implement Identifiable can be identified and compared.
- */
-interface Identifiable {
-  hash(): number;
-  isEqual(object: Object): boolean;
-}
-
-/**
- * Objects that implement Iterable can be traversed.
- */
-interface Iterable<T> {
-  /**
-   * Returns the next object or the first object when on the last one.
-   */
-  next(): T;
-
-  /**
-   * Returns the previous object or the last object when on the first one.
-   */
-  previous(): T;
-}
-
-
-/**
  * A simple point object for 2D-coordinates.
  */
 interface Point {
@@ -45,7 +21,7 @@ interface Size {
  */
 interface Rectangle extends Point, Size { }
 
-interface Modal extends Phoenix.ModalProperties, Identifiable {
+interface Modal extends Phoenix.ModalProperties, Phoenix.Identifiable {
   /**
    * Dynamic property for the origin of the modal, the enclosed properties are
    * read-only so you must pass an object for this property, bottom-left based
@@ -82,7 +58,7 @@ interface ModalConstructor {
  */
 declare var Modal: ModalConstructor;
 
-interface Screen extends Identifiable, Iterable<Screen> {
+interface Screen extends Phoenix.Identifiable, Phoenix.Iterable<Screen> {
   /**
    * Returns the UUID for the screen.
    */
@@ -152,7 +128,7 @@ interface ScreenObject {
 declare var Screen: ScreenObject;
 
 
-interface Space extends Identifiable, Iterable<Space> {
+interface Space extends Phoenix.Identifiable, Phoenix.Iterable<Space> {
   /**
    * Returns true if the space is a normal space.
    */
@@ -229,7 +205,7 @@ interface Mouse {
 declare var Mouse: Mouse;
 
 
-interface App extends Identifiable {
+interface App extends Phoenix.Identifiable {
   /**
    * Returns the process identifier (PID) for the app, returns -1 if the app
    * does not have a PID.
@@ -338,7 +314,7 @@ interface AppObject {
 declare var App: AppObject;
 
 
-interface Window extends Identifiable {
+interface Window extends Phoenix.Identifiable {
   /**
    * Returns all other windows on all screens if no optionals are given.
    */
@@ -504,7 +480,7 @@ interface WindowObject {
 declare var Window: WindowObject;
 
 
-interface Key extends Identifiable {
+interface Key extends Phoenix.Identifiable {
   /**
    * Read-only property for the key character in lower case or case sensitive
    * special key.
@@ -567,7 +543,7 @@ interface KeyConstructor {
 declare var Key: KeyConstructor;
 
 
-interface Event extends Identifiable {
+interface Event extends Phoenix.Identifiable {
   /**
    * Read-only property for the event name.
    */
@@ -604,7 +580,7 @@ interface EventConstructor {
 declare var Event: EventConstructor;
 
 
-interface Timer extends Identifiable {
+interface Timer extends Phoenix.Identifiable {
   /**
    * Stops the timer immediately.
    */
@@ -640,7 +616,7 @@ interface TimerConstructor {
 declare var Timer: TimerConstructor;
 
 
-interface Task extends Identifiable {
+interface Task extends Phoenix.Identifiable {
   /**
    * Read-only property for the termination status.
    */
@@ -810,4 +786,27 @@ declare namespace Phoenix {
     | 'keypad9';
 
   type KeyCallback = (handler: Key, repeated: boolean) => void;
+
+  /**
+   * Objects that implement Identifiable can be identified and compared.
+   */
+  interface Identifiable {
+    hash(): number;
+    isEqual(object: Object): boolean;
+  }
+
+  /**
+   * Objects that implement Iterable can be traversed.
+   */
+  interface Iterable<T> {
+    /**
+     * Returns the next object or the first object when on the last one.
+     */
+    next(): T;
+
+    /**
+     * Returns the previous object or the last object when on the first one.
+     */
+    previous(): T;
+  }
 }
