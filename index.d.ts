@@ -2,6 +2,11 @@
  * Phoenix (kasper/phoenix) typings for TypeScript.
  */
 
+interface Error {
+  line: number;
+  column: number;
+}
+
 /**
  * A simple point object for 2D-coordinates.
  */
