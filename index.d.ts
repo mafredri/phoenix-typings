@@ -1,4 +1,8 @@
 /**
+ * Phoenix (kasper/phoenix) typings for TypeScript.
+ */
+
+/**
  * A simple point object for 2D-coordinates.
  */
 interface Point {
