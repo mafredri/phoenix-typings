@@ -15,7 +15,6 @@ interface Point {
   y: number;
 }
 
-
 /**
  * A simple 2D-size object.
  */
@@ -24,11 +23,10 @@ interface Size {
   height: number;
 }
 
-
 /**
  * A 2D-rectangle representation of a Point and Size.
  */
-interface Rectangle extends Point, Size { }
+interface Rectangle extends Point, Size {}
 
 interface Modal extends Phoenix.ModalProperties, Phoenix.Identifiable {
   /**
@@ -110,7 +108,7 @@ interface Screen extends Phoenix.Identifiable, Phoenix.Iterable<Screen> {
   /**
    * Returns all windows for the screen if no optionals are given.
    */
-  windows(optionals?: { visible?: boolean }): Window[];
+  windows(optionals?: {visible?: boolean}): Window[];
 }
 
 interface ScreenObject {
@@ -136,7 +134,6 @@ interface ScreenObject {
  */
 declare var Screen: ScreenObject;
 
-
 interface Space extends Phoenix.Identifiable, Phoenix.Iterable<Space> {
   /**
    * Returns true if the space is a normal space.
@@ -156,7 +153,7 @@ interface Space extends Phoenix.Identifiable, Phoenix.Iterable<Space> {
   /**
    * Returns all windows for the space if no optionals are given.
    */
-  windows(optionals?: { visible?: boolean }): Window[];
+  windows(optionals?: {visible?: boolean}): Window[];
 
   /**
    * Adds the given windows to the space.
@@ -195,7 +192,6 @@ interface SpaceObject {
  */
 declare var Space: SpaceObject;
 
-
 interface Mouse {
   /**
    * Returns the cursor position.
@@ -212,7 +208,6 @@ interface Mouse {
  * Use the Mouse-object to control the cursor.
  */
 declare var Mouse: Mouse;
-
 
 interface App extends Phoenix.Identifiable {
   /**
@@ -259,7 +254,7 @@ interface App extends Phoenix.Identifiable {
   /**
    * Returns all windows for the app if no optionals are given.
    */
-  windows(optionals?: { visible: boolean }): Window[];
+  windows(optionals?: {visible: boolean}): Window[];
 
   /**
    * Activates the app and brings its windows forward, returns true if
@@ -286,7 +281,7 @@ interface App extends Phoenix.Identifiable {
   /**
    * Terminates the app, returns true if successful.
    */
-  terminate(optionals?: { force?: boolean }): boolean;
+  terminate(optionals?: {force?: boolean}): boolean;
 }
 
 interface AppObject {
@@ -322,12 +317,11 @@ interface AppObject {
  */
 declare var App: AppObject;
 
-
 interface Window extends Phoenix.Identifiable {
   /**
    * Returns all other windows on all screens if no optionals are given.
    */
-  others(optionals?: { screen?: Screen, visible?: boolean }): Window[];
+  others(optionals?: {screen?: Screen; visible?: boolean}): Window[];
 
   /**
    * Returns the title for the window.
@@ -468,7 +462,7 @@ interface WindowObject {
   /**
    * Returns all windows in screens if no optionals are given.
    */
-  all(optionals?: { visible?: boolean }): Window[];
+  all(optionals?: {visible?: boolean}): Window[];
   /**
    * Returns all visible windows in the order as they appear on the screen (from
    * front to back), essentially returning them in the most-recently-used order.
@@ -487,7 +481,6 @@ interface WindowObject {
  * if you keep a reference to it and it is for instance closed while you do so.
  */
 declare var Window: WindowObject;
-
 
 interface Key extends Phoenix.Identifiable {
   /**
@@ -528,14 +521,22 @@ interface KeyConstructor {
    * handler for the same key combination will automatically be disabled, the
    * callback function receives its handler as the only argument.
    */
-  new (key: Phoenix.KeyIdentifier, modifiers: Phoenix.ModifierKey[], callback: Phoenix.KeyCallback): Key | undefined;
+  new (
+    key: Phoenix.KeyIdentifier,
+    modifiers: Phoenix.ModifierKey[],
+    callback: Phoenix.KeyCallback
+  ): Key | undefined;
   prototype: Key;
 
   /**
    * Constructs a managed handler for a key and returns the identifier for the
    * handler.
    */
-  on(key: Phoenix.KeyIdentifier, modifiers: Phoenix.ModifierKey[], callback: Phoenix.KeyCallback): number;
+  on(
+    key: Phoenix.KeyIdentifier,
+    modifiers: Phoenix.ModifierKey[],
+    callback: Phoenix.KeyCallback
+  ): number;
   /**
    * Disables the managed handler for a key with the given identifier.
    */
@@ -550,7 +551,6 @@ interface KeyConstructor {
  * been exclusively registered by another app will fail.
  */
 declare var Key: KeyConstructor;
-
 
 interface Event extends Phoenix.Identifiable {
   /**
@@ -567,14 +567,20 @@ interface EventConstructor {
    * handlers for a single event, the callback function receives its handler as
    * the last argument, for any additional arguments see events
    */
-  new (event: Phoenix.Event, callback: (target: App | Window | Point | Event, handler: Event) => void): Event | undefined;
+  new (
+    event: Phoenix.Event,
+    callback: (target: App | Window | Point | Event, handler: Event) => void
+  ): Event | undefined;
   prototype: Event;
 
   /**
    * Constructs a managed handler for an event and returns the identifier for
    * the handler.
    */
-  on(event: Phoenix.Event, callback: (target: App | Window | Point | Event, handler: Event) => void): number;
+  on(
+    event: Phoenix.Event,
+    callback: (target: App | Window | Point | Event, handler: Event) => void
+  ): number;
   /**
    * Disables the managed handler for an event with the given identifier.
    */
@@ -587,7 +593,6 @@ interface EventConstructor {
  * the handler. Events are always reset on context reload.
  */
 declare var Event: EventConstructor;
-
 
 interface Timer extends Phoenix.Identifiable {
   /**
@@ -623,7 +628,6 @@ interface TimerConstructor {
 }
 
 declare var Timer: TimerConstructor;
-
 
 interface Task extends Phoenix.Identifiable {
   /**
@@ -664,7 +668,6 @@ interface TaskConstructor {
  */
 declare var Task: TaskConstructor;
 
-
 interface Storage {
   /**
    * Stores the value for the key, any previously set value with the same key
@@ -685,7 +688,6 @@ interface Storage {
 }
 
 declare var Storage: Storage;
-
 
 interface Phoenix {
   /**
@@ -715,7 +717,6 @@ interface Phoenix {
  */
 declare var Phoenix: Phoenix;
 
-
 declare namespace Phoenix {
   interface Preferences {
     /**
@@ -729,7 +730,7 @@ declare namespace Phoenix {
     openAtLogin?: boolean;
   }
 
-  interface Icon { }
+  interface Icon {}
 
   interface ModalProperties {
     /**
@@ -766,13 +767,30 @@ declare namespace Phoenix {
   type Direction = 'west' | 'east' | 'north' | 'south';
 
   type Event =
-    'didLaunch' | 'willTerminate' |
-    'screensDidChange' |
-    'spaceDidChange' |
-    'mouseDidMove' | 'mouseDidMove' | 'mouseDidLeftClick' | 'mouseDidRightClick' | 'mouseDidLeftDrag' | 'mouseDidRightDrag' |
-    'appDidLaunch' | 'appDidTerminate' | 'appDidActivate' | 'appDidHide' | 'appDidShow' |
-    'windowDidOpen' | 'windowDidClose' | 'windowDidFocus' | 'windowDidMove' | 'windowDidResize' | 'windowDidMinimize' | 'windowDidUnminimize' |
-    'windowDidMinimise' | 'windowDidUnminimise';
+    | 'didLaunch'
+    | 'willTerminate'
+    | 'screensDidChange'
+    | 'spaceDidChange'
+    | 'mouseDidMove'
+    | 'mouseDidMove'
+    | 'mouseDidLeftClick'
+    | 'mouseDidRightClick'
+    | 'mouseDidLeftDrag'
+    | 'mouseDidRightDrag'
+    | 'appDidLaunch'
+    | 'appDidTerminate'
+    | 'appDidActivate'
+    | 'appDidHide'
+    | 'appDidShow'
+    | 'windowDidOpen'
+    | 'windowDidClose'
+    | 'windowDidFocus'
+    | 'windowDidMove'
+    | 'windowDidResize'
+    | 'windowDidMinimize'
+    | 'windowDidUnminimize'
+    | 'windowDidMinimise'
+    | 'windowDidUnminimise';
 
   type ModifierKey = 'cmd' | 'alt' | 'ctrl' | 'shift';
 
@@ -780,18 +798,62 @@ declare namespace Phoenix {
    * A key can be any key on your local keyboard layout, for instance an
    * å-character if your keyboard has one.
    */
-  type KeyIdentifier = string
+  type KeyIdentifier =
+    | string
     // Action keys
-    | 'return' | 'tab' | 'space' | 'delete' | 'escape' | 'help' | 'home'
-    | 'pageUp' | 'forwardDelete' | 'end' | 'pageDown' | 'left' | 'right'
-    | 'down' | 'up'
+    | 'return'
+    | 'tab'
+    | 'space'
+    | 'delete'
+    | 'escape'
+    | 'help'
+    | 'home'
+    | 'pageUp'
+    | 'forwardDelete'
+    | 'end'
+    | 'pageDown'
+    | 'left'
+    | 'right'
+    | 'down'
+    | 'up'
     // Function keys
-    | 'f1' | 'f2' | 'f3' | 'f4' | 'f5' | 'f6' | 'f7' | 'f8' | 'f9' | 'f10'
-    | 'f11' | 'f12' | 'f13' | 'f14' | 'f15' | 'f16' | 'f17' | 'f18' | 'f19'
+    | 'f1'
+    | 'f2'
+    | 'f3'
+    | 'f4'
+    | 'f5'
+    | 'f6'
+    | 'f7'
+    | 'f8'
+    | 'f9'
+    | 'f10'
+    | 'f11'
+    | 'f12'
+    | 'f13'
+    | 'f14'
+    | 'f15'
+    | 'f16'
+    | 'f17'
+    | 'f18'
+    | 'f19'
     // Keypad keys
-    | 'keypad.' | 'keypad*' | 'keypad+' | 'keypadClear' | 'keypad/'
-    | 'keypadEnter' | 'keypad-' | 'keypad=' | 'keypad0' | 'keypad1' | 'keypad2'
-    | 'keypad3' | 'keypad4' | 'keypad5' | 'keypad6' | 'keypad7' | 'keypad8'
+    | 'keypad.'
+    | 'keypad*'
+    | 'keypad+'
+    | 'keypadClear'
+    | 'keypad/'
+    | 'keypadEnter'
+    | 'keypad-'
+    | 'keypad='
+    | 'keypad0'
+    | 'keypad1'
+    | 'keypad2'
+    | 'keypad3'
+    | 'keypad4'
+    | 'keypad5'
+    | 'keypad6'
+    | 'keypad7'
+    | 'keypad8'
     | 'keypad9';
 
   type KeyCallback = (handler: Key, repeated: boolean) => void;

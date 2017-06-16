@@ -10,9 +10,12 @@
   "main": "",
   "repository": "mafredri/phoenix-typings",
   "typings": "index.d.ts",
-  "scripts": {},
+  "scripts": {
+    "format": "prettier --write --single-quote --trailing-comma es5 *.ts"
+  },
   "devDependencies": {
     "onchange": "^3.2.1",
+    "prettier": "^1.4.4",
     "tslint": "^5.1.0",
     "tslint-config-typings": "^0.3.1",
     "typescript": "^2.2.2",
