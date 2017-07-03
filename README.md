@@ -22,18 +22,22 @@ Here's a simple example `tsconfig.json`:
   "compilerOptions": {
     "module": "commonjs",
     "moduleResolution": "node",
+    "baseUrl": "src",
     "outDir": "out",
-    "target": "es5",
+    "target": "es2015",
+    "strict": true,
+    "typeRoots": [
+      "node_modules/@types",
+      "typings/globals"
+    ],
     "lib": [
       "es2017"
     ]
   },
-  "files": [
-    "typings/index.d.ts",
-    "src/phoenix.d.ts",
-    "src/phoenix.ts"
+  "exclude": [
+    "node_modules"
   ]
 }
 ```
 
-**NOTE:** Phoenix does not support CommonJS type of `require`. In order to use `require` or ES2015 style `import`, webpack is highly recommended. For an example on how to set up webpack, see [mafredri/phoenix-config](https://github.com/mafredri/phoenix-config) with it's [`webpack.config.js`](https://github.com/mafredri/phoenix-config/blob/4c8fdb07174fddf84426d6fd2a3f11add9ae918d/webpack.config.js) and [`tsconfig.json`](https://github.com/mafredri/phoenix-config/blob/4c8fdb07174fddf84426d6fd2a3f11add9ae918d/tsconfig.json)
+**NOTE:** Phoenix does not support CommonJS type of `require`. In order to use `require` or ES2015 style `import`, webpack is highly recommended. For an example on how to set up webpack, see [mafredri/phoenix-config](https://github.com/mafredri/phoenix-config) with it's [`webpack.config.js`](https://github.com/mafredri/phoenix-config/blob/1887b57cdce1410f26f6f99e215d83a4ee1fb72a/webpack.config.js) and [`tsconfig.json`](https://github.com/mafredri/phoenix-config/blob/1887b57cdce1410f26f6f99e215d83a4ee1fb72a/tsconfig.json). Requires `webpack` and `ts-loader`.
