@@ -761,7 +761,7 @@ declare namespace Phoenix {
   }
 
   interface ModalBuilder extends ModalProperties {
-    origin(frame: Rectangle): Point;
+    origin?(frame: Rectangle): Point;
   }
 
   type Direction = 'west' | 'east' | 'north' | 'south';
