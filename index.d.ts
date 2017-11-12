@@ -567,9 +567,20 @@ interface EventConstructor {
    * handlers for a single event, the callback function receives its handler as
    * the last argument, for any additional arguments see events
    */
+  new (event: Phoenix.Event, callback: (handler: Event) => void):
+    | Event
+    | undefined;
   new (
-    event: Phoenix.Event,
-    callback: (target: App | Window | Point | Event, handler: Event) => void
+    event: Phoenix.AppEvent,
+    callback: (target: App, handler: Event) => void
+  ): Event | undefined;
+  new (
+    event: Phoenix.MouseEvent,
+    callback: (target: Point, handler: Event) => void
+  ): Event | undefined;
+  new (
+    event: Phoenix.WindowEvent,
+    callback: (target: Window, handler: Event) => void
   ): Event | undefined;
   prototype: Event;
 
@@ -577,9 +588,18 @@ interface EventConstructor {
    * Constructs a managed handler for an event and returns the identifier for
    * the handler.
    */
+  on(event: Phoenix.Event, callback: (handler: Event) => void): number;
   on(
-    event: Phoenix.Event,
-    callback: (target: App | Window | Point | Event, handler: Event) => void
+    event: Phoenix.AppEvent,
+    callback: (target: App, handler: Event) => void
+  ): number;
+  on(
+    event: Phoenix.MouseEvent,
+    callback: (target: Point, handler: Event) => void
+  ): number;
+  on(
+    event: Phoenix.WindowEvent,
+    callback: (target: Window, handler: Event) => void
   ): number;
   /**
    * Disables the managed handler for an event with the given identifier.
@@ -770,18 +790,21 @@ declare namespace Phoenix {
     | 'didLaunch'
     | 'willTerminate'
     | 'screensDidChange'
-    | 'spaceDidChange'
+    | 'spaceDidChange';
+  type MouseEvent =
     | 'mouseDidMove'
     | 'mouseDidMove'
     | 'mouseDidLeftClick'
     | 'mouseDidRightClick'
     | 'mouseDidLeftDrag'
-    | 'mouseDidRightDrag'
+    | 'mouseDidRightDrag';
+  type AppEvent =
     | 'appDidLaunch'
     | 'appDidTerminate'
     | 'appDidActivate'
     | 'appDidHide'
-    | 'appDidShow'
+    | 'appDidShow';
+  type WindowEvent =
     | 'windowDidOpen'
     | 'windowDidClose'
     | 'windowDidFocus'
