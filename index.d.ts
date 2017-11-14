@@ -726,6 +726,11 @@ interface Task extends Phoenix.Identifiable {
    * Read-only property for the standard error.
    */
   readonly error: string;
+
+  /**
+   * Terminate the task immediately.
+   */
+  terminate(): void;
 }
 
 interface TaskObject {
