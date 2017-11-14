@@ -618,6 +618,11 @@ interface Event extends Phoenix.Identifiable {
    * Read-only property for the event name.
    */
   readonly name: string;
+
+  /**
+   * Disable the event handler.
+   */
+  disable(): void;
 }
 
 interface EventObject {
