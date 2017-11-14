@@ -169,7 +169,7 @@ interface Screen extends Phoenix.Identifiable, Phoenix.Iterable<Screen> {
   /**
    * Returns all windows for the screen if no optionals are given.
    */
-  windows(optionals?: {visible?: boolean}): Window[];
+  windows(options?: {visible?: boolean}): Window[];
 }
 
 interface ScreenObject {
@@ -214,7 +214,7 @@ interface Space extends Phoenix.Identifiable, Phoenix.Iterable<Space> {
   /**
    * Returns all windows for the space if no optionals are given.
    */
-  windows(optionals?: {visible?: boolean}): Window[];
+  windows(options?: {visible?: boolean}): Window[];
 
   /**
    * Adds the given windows to the space.
@@ -315,7 +315,7 @@ interface App extends Phoenix.Identifiable {
   /**
    * Returns all windows for the app if no optionals are given.
    */
-  windows(optionals?: {visible: boolean}): Window[];
+  windows(options?: {visible: boolean}): Window[];
 
   /**
    * Activates the app and brings its windows forward, returns true if
@@ -342,7 +342,7 @@ interface App extends Phoenix.Identifiable {
   /**
    * Terminates the app, returns true if successful.
    */
-  terminate(optionals?: {force?: boolean}): boolean;
+  terminate(options?: {force?: boolean}): boolean;
 }
 
 interface AppObject {
@@ -382,7 +382,7 @@ interface Window extends Phoenix.Identifiable {
   /**
    * Returns all other windows on all screens if no optionals are given.
    */
-  others(optionals?: {screen?: Screen; visible?: boolean}): Window[];
+  others(options?: {screen?: Screen; visible?: boolean}): Window[];
 
   /**
    * Returns the title for the window.
@@ -523,7 +523,7 @@ interface WindowObject {
   /**
    * Returns all windows in screens if no optionals are given.
    */
-  all(optionals?: {visible?: boolean}): Window[];
+  all(options?: {visible?: boolean}): Window[];
   /**
    * Returns all visible windows in the order as they appear on the screen (from
    * front to back), essentially returning them in the most-recently-used order.
