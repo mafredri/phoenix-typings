@@ -161,10 +161,10 @@ interface Screen extends Phoenix.Identifiable, Phoenix.Iterable<Screen> {
   currentSpace(): Space | undefined;
 
   /**
-   * Returns all spaces for the screen (OS X 10.11+, returns an empty list
+   * Returns all spaces for the screen (macOS 10.11+, returns an empty list
    * otherwise).
    */
-  spaces(): Space[]; // OS X 10.11+
+  spaces(): Space[]; // macOS 10.11+
 
   /**
    * Returns all windows for the screen if no optionals are given.
@@ -231,16 +231,16 @@ interface SpaceObject {
   prototype: Space;
 
   /**
-   * Returns the space containing the window with the keyboard focus (OS X
+   * Returns the space containing the window with the keyboard focus (macOS
    * 10.11+, returns undefined otherwise).
    */
-  active(): Space | undefined; // OS X 10.11+
+  active(): Space | undefined; // macOS 10.11+
 
   /**
    * Returns all spaces, the first space in this array corresponds to the
-   * primary space (OS X 10.11+, returns an empty list otherwise).
+   * primary space (macOS 10.11+, returns an empty list otherwise).
    */
-  all(): Space[]; // OS X 10.11+
+  all(): Space[]; // macOS 10.11+
 }
 
 /**
@@ -426,10 +426,10 @@ interface Window extends Phoenix.Identifiable {
   screen(): Screen;
 
   /**
-   * Returns the spaces where the window is currently present (OS X 10.11+,
+   * Returns the spaces where the window is currently present (macOS 10.11+,
    * returns an empty list otherwise).
    */
-  spaces(): Space[]; // OS X 10.11+
+  spaces(): Space[]; // macOS 10.11+
 
   /**
    * Returns the top left point for the window.
