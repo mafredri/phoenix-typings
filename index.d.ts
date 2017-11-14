@@ -34,7 +34,7 @@ interface Modal extends Phoenix.ModalProperties, Phoenix.Identifiable {
    * read-only so you must pass an object for this property, bottom-left based
    * origin, by default `(0, 0)`.
    */
-  origin: Point;
+  origin: Phoenix.ReadonlyPoint;
 
   /**
    * Returns the frame for the modal, the frame is adjusted for the current
@@ -751,6 +751,11 @@ declare namespace Phoenix {
   }
 
   interface Icon {}
+
+  interface ReadonlyPoint {
+    readonly x: number;
+    readonly y: number;
+  }
 
   interface ModalProperties {
     /**
