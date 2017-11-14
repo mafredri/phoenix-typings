@@ -79,7 +79,7 @@ interface Modal extends Phoenix.Identifiable {
   close(): void;
 }
 
-interface ModalConstructor {
+interface ModalObject {
   new (): Modal;
   prototype: Modal;
 
@@ -124,7 +124,7 @@ interface ModalConstructor {
 /**
  * Use the Modal-object to display messages as modal windows.
  */
-declare var Modal: ModalConstructor;
+declare var Modal: ModalObject;
 
 interface Screen extends Phoenix.Identifiable, Phoenix.Iterable<Screen> {
   /**
@@ -572,7 +572,7 @@ interface Key extends Phoenix.Identifiable {
   disable(): boolean;
 }
 
-interface KeyConstructor {
+interface KeyObject {
   /**
    * Constructs and binds the key character with the specified modifiers (can be
    * an empty list) to a callback function and returns the handler (undefined if
@@ -611,7 +611,7 @@ interface KeyConstructor {
  * Keys are always reset on context reload. Enabling a key combination that has
  * been exclusively registered by another app will fail.
  */
-declare var Key: KeyConstructor;
+declare var Key: KeyObject;
 
 interface Event extends Phoenix.Identifiable {
   /**
@@ -620,7 +620,7 @@ interface Event extends Phoenix.Identifiable {
   name: string;
 }
 
-interface EventConstructor {
+interface EventObject {
   /**
    * Constructs and binds an event to a callback function and returns the
    * handler (undefined if not supported), you must keep a reference to the
@@ -671,7 +671,7 @@ interface EventConstructor {
  * handlers for a single event. To disable an event, release your reference to
  * the handler. Events are always reset on context reload.
  */
-declare var Event: EventConstructor;
+declare var Event: EventObject;
 
 interface Timer extends Phoenix.Identifiable {
   /**
@@ -680,7 +680,7 @@ interface Timer extends Phoenix.Identifiable {
   stop(): void;
 }
 
-interface TimerConstructor {
+interface TimerObject {
   /**
    * Constructs a timer that fires the callback once or repeatedly until stopped
    * with the given interval (in seconds) and returns the handler, you must keep
@@ -706,7 +706,7 @@ interface TimerConstructor {
   off(identifier: number): void;
 }
 
-declare var Timer: TimerConstructor;
+declare var Timer: TimerObject;
 
 interface Task extends Phoenix.Identifiable {
   /**
@@ -723,7 +723,7 @@ interface Task extends Phoenix.Identifiable {
   error: string;
 }
 
-interface TaskConstructor {
+interface TaskObject {
   /**
    * Constructs a task that asynchronously executes.
    */
@@ -745,7 +745,7 @@ interface TaskConstructor {
  * your reference to the handler. Tasks are always reset on context reload.
  * Beware that some task properties are only set after the task has completed.
  */
-declare var Task: TaskConstructor;
+declare var Task: TaskObject;
 
 interface Storage {
   /**
