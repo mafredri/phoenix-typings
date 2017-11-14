@@ -586,7 +586,7 @@ interface KeyConstructor {
     key: Phoenix.KeyIdentifier,
     modifiers: Phoenix.ModifierKey[],
     callback: Phoenix.KeyCallback
-  ): Key | undefined;
+  ): Key;
   prototype: Key;
 
   /**
@@ -628,21 +628,19 @@ interface EventConstructor {
    * handlers for a single event, the callback function receives its handler as
    * the last argument, for any additional arguments see events
    */
-  new (event: Phoenix.Event, callback: (handler: Event) => void):
-    | Event
-    | undefined;
+  new (event: Phoenix.Event, callback: (handler: Event) => void): Event;
   new (
     event: Phoenix.AppEvent,
     callback: (target: App, handler: Event) => void
-  ): Event | undefined;
+  ): Event;
   new (
     event: Phoenix.MouseEvent,
     callback: (target: Point, handler: Event) => void
-  ): Event | undefined;
+  ): Event;
   new (
     event: Phoenix.WindowEvent,
     callback: (target: Window, handler: Event) => void
-  ): Event | undefined;
+  ): Event;
   prototype: Event;
 
   /**
