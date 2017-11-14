@@ -548,12 +548,12 @@ interface Key extends Phoenix.Identifiable {
    * Read-only property for the key character in lower case or case sensitive
    * special key.
    */
-  key: string;
+  readonly key: string;
 
   /**
    * Read-only property for the key modifiers in lower case.
    */
-  modifiers: string[];
+  readonly modifiers: string[];
 
   /**
    * Returns true if the key handler is enabled, by default true.
@@ -617,7 +617,7 @@ interface Event extends Phoenix.Identifiable {
   /**
    * Read-only property for the event name.
    */
-  name: string;
+  readonly name: string;
 }
 
 interface EventObject {
@@ -712,15 +712,15 @@ interface Task extends Phoenix.Identifiable {
   /**
    * Read-only property for the termination status.
    */
-  status: number;
+  readonly status: number;
   /**
    * Read-only property for the standard output.
    */
-  output: string;
+  readonly output: string;
   /**
    * Read-only property for the standard error.
    */
-  error: string;
+  readonly error: string;
 }
 
 interface TaskObject {
