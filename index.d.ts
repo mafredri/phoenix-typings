@@ -28,13 +28,39 @@ interface Size {
  */
 interface Rectangle extends Point, Size {}
 
-interface Modal extends Phoenix.ModalProperties, Phoenix.Identifiable {
+interface Modal extends Phoenix.Identifiable {
   /**
    * Dynamic property for the origin of the modal, the enclosed properties are
    * read-only so you must pass an object for this property, bottom-left based
    * origin, by default `(0, 0)`.
    */
-  origin: Point;
+  origin: Phoenix.ReadonlyPoint;
+
+  /**
+   * Property for the duration (in seconds) for the modal, if the duration is
+   * set to 0 the modal will remain open until closed, by default 0.
+   */
+  duration: number;
+
+  /**
+   * Dynamic property for the weight of the modal (in points), by default `24`.
+   */
+  weight: number;
+
+  /**
+   * Property for the appearance of the modal, by default `dark`.
+   */
+  appearance: 'dark' | 'light' | 'transparent';
+
+  /**
+   * Dynamic property for the icon displayed in the modal.
+   */
+  icon: Phoenix.Icon;
+
+  /**
+   * Dynamic property for the text displayed in the modal.
+   */
+  text: string;
 
   /**
    * Returns the frame for the modal, the frame is adjusted for the current
@@ -53,17 +79,52 @@ interface Modal extends Phoenix.ModalProperties, Phoenix.Identifiable {
   close(): void;
 }
 
-interface ModalConstructor {
-  new (): Modal;
-  prototype: Modal;
-
-  build(properties: Phoenix.ModalBuilder): Modal;
-}
-
 /**
- * Use the Modal-object to display messages as modal windows.
+ * Use the Modal-object to display content as modal windows (in front of all
+ * other windows). Modals can be used to display icons and/or text for visual
+ * cues. Properties defined as dynamic can be altered while the modal is
+ * displayed.
  */
-declare var Modal: ModalConstructor;
+declare var Modal: {
+  new (): Modal;
+
+  /**
+   * Builds a modal with the specified properties and returns it.
+   */
+  build(properties: {
+    /**
+     * Function that receives the frame for the modal and returns a Point which
+     * will be set as the origin for the modal.
+     */
+    origin?(frame: Rectangle): Point;
+
+    /**
+     * Property for the duration (in seconds) for the modal, if the duration is
+     * set to 0 the modal will remain open until closed, by default 0.
+     */
+    duration?: number;
+
+    /**
+     * Dynamic property for the weight of the modal (in points), by default `24`.
+     */
+    weight?: number;
+
+    /**
+     * Property for the appearance of the modal, by default `dark`.
+     */
+    appearance?: 'dark' | 'light' | 'transparent';
+
+    /**
+     * Dynamic property for the icon displayed in the modal.
+     */
+    icon?: Phoenix.Icon;
+
+    /**
+     * Dynamic property for the text displayed in the modal.
+     */
+    text?: string;
+  }): Modal;
+};
 
 interface Screen extends Phoenix.Identifiable, Phoenix.Iterable<Screen> {
   /**
@@ -100,20 +161,23 @@ interface Screen extends Phoenix.Identifiable, Phoenix.Iterable<Screen> {
   currentSpace(): Space | undefined;
 
   /**
-   * Returns all spaces for the screen (OS X 10.11+, returns an empty list
+   * Returns all spaces for the screen (macOS 10.11+, returns an empty list
    * otherwise).
    */
-  spaces(): Space[]; // OS X 10.11+
+  spaces(): Space[]; // macOS 10.11+
 
   /**
    * Returns all windows for the screen if no optionals are given.
    */
-  windows(optionals?: {visible?: boolean}): Window[];
+  windows(options?: {visible?: boolean}): Window[];
 }
 
-interface ScreenObject {
-  prototype: Screen;
-
+/**
+ * Use the Screen-object to access frame sizes and other screens on a
+ * multi-screen setup. Beware that a screen can get stale if you keep a
+ * reference to it and it is for instance disconnected while you do so.
+ */
+declare var Screen: {
   /**
    * Returns the screen containing the window with the keyboard focus.
    */
@@ -124,15 +188,7 @@ interface ScreenObject {
    * primary screen for the system.
    */
   all(): Screen[];
-}
-
-/**
- * Use the Screen-object to access frame sizes and other screens on a
- * multi-screen setup. Get the current screen for a window through the
- * Window-object. Beware that a screen can get stale if you keep a reference to
- * it and it is for instance disconnected while you do so.
- */
-declare var Screen: ScreenObject;
+};
 
 interface Space extends Phoenix.Identifiable, Phoenix.Iterable<Space> {
   /**
@@ -153,7 +209,7 @@ interface Space extends Phoenix.Identifiable, Phoenix.Iterable<Space> {
   /**
    * Returns all windows for the space if no optionals are given.
    */
-  windows(optionals?: {visible?: boolean}): Window[];
+  windows(options?: {visible?: boolean}): Window[];
 
   /**
    * Adds the given windows to the space.
@@ -166,33 +222,33 @@ interface Space extends Phoenix.Identifiable, Phoenix.Iterable<Space> {
   removeWindows(windows: Window[]): void;
 }
 
-interface SpaceObject {
-  prototype: Space;
-
+/**
+ * Use the Space-object to control spaces. A single window can be in multiple
+ * spaces at the same time. To move a window to a different space, remove it
+ * from any existing spaces and add it to a new one. You can switch to a space
+ * by focusing on a window in that space. Beware that a space can get stale if
+ * you keep a reference to it and it is for instance closed while you do so.
+ *
+ * These features are only supported on El Capitan (10.11) and upwards.
+ */
+declare var Space: {
   /**
-   * Returns the space containing the window with the keyboard focus (OS X
+   * Returns the space containing the window with the keyboard focus (macOS
    * 10.11+, returns undefined otherwise).
    */
-  active(): Space | undefined; // OS X 10.11+
+  active(): Space | undefined; // macOS 10.11+
 
   /**
    * Returns all spaces, the first space in this array corresponds to the
-   * primary space (OS X 10.11+, returns an empty list otherwise).
+   * primary space (macOS 10.11+, returns an empty list otherwise).
    */
-  all(): Space[]; // OS X 10.11+
-}
+  all(): Space[]; // macOS 10.11+
+};
 
 /**
- * Use the Space-object to control spaces. These features are only supported on
- * El Capitan (10.11) and upwards. A single window can be in multiple spaces at
- * the same time. To move a window to a different space, remove it from any
- * existing spaces and add it to a new one. You can switch to a space by
- * focusing on a window in that space. Beware that a space can get stale if you
- * keep a reference to it and it is for instance closed while you do so.
+ * Use the Mouse-object to control the cursor.
  */
-declare var Space: SpaceObject;
-
-interface Mouse {
+declare var Mouse: {
   /**
    * Returns the cursor position.
    */
@@ -202,12 +258,7 @@ interface Mouse {
    * Moves the cursor to a given position, returns true if successful.
    */
   move(point: Point): boolean;
-}
-
-/**
- * Use the Mouse-object to control the cursor.
- */
-declare var Mouse: Mouse;
+};
 
 interface App extends Phoenix.Identifiable {
   /**
@@ -254,7 +305,7 @@ interface App extends Phoenix.Identifiable {
   /**
    * Returns all windows for the app if no optionals are given.
    */
-  windows(optionals?: {visible: boolean}): Window[];
+  windows(options?: {visible: boolean}): Window[];
 
   /**
    * Activates the app and brings its windows forward, returns true if
@@ -281,12 +332,15 @@ interface App extends Phoenix.Identifiable {
   /**
    * Terminates the app, returns true if successful.
    */
-  terminate(optionals?: {force?: boolean}): boolean;
+  terminate(options?: {force?: boolean}): boolean;
 }
 
-interface AppObject {
-  prototype: App;
-
+/**
+ * Use the App-object to control apps. Beware that an app can get stale if you
+ * keep a reference to it and it is for instance terminated while you do so,
+ * refer to isTerminated().
+ */
+declare var App: {
   /**
    * Returns the running app with the given name, returns undefined if the app
    * is not currently running.
@@ -308,20 +362,13 @@ interface AppObject {
    * Returns all running apps.
    */
   all(): App[];
-}
-
-/**
- * Use the App-object to control apps. Beware that an app can get stale if you
- * keep a reference to it and it is for instance terminated while you do so, see
- * isTerminated().
- */
-declare var App: AppObject;
+};
 
 interface Window extends Phoenix.Identifiable {
   /**
    * Returns all other windows on all screens if no optionals are given.
    */
-  others(optionals?: {screen?: Screen; visible?: boolean}): Window[];
+  others(options?: {screen?: Screen; visible?: boolean}): Window[];
 
   /**
    * Returns the title for the window.
@@ -365,10 +412,10 @@ interface Window extends Phoenix.Identifiable {
   screen(): Screen;
 
   /**
-   * Returns the spaces where the window is currently present (OS X 10.11+,
+   * Returns the spaces where the window is currently present (macOS 10.11+,
    * returns an empty list otherwise).
    */
-  spaces(): Space[]; // OS X 10.11+
+  spaces(): Space[]; // macOS 10.11+
 
   /**
    * Returns the top left point for the window.
@@ -444,9 +491,16 @@ interface Window extends Phoenix.Identifiable {
   focusClosestNeighbor(direction: Phoenix.Direction): boolean;
 }
 
-interface WindowObject {
-  prototype: Window;
-
+/**
+ * Use the Window-object to control windows. Every screen (i.e. display)
+ * combines to form a large rectangle. Every window lives within this rectangle
+ * and their position can be altered by giving coordinates inside this
+ * rectangle. To position a window to a specific display, you need to calculate
+ * its position within the large rectangle. To figure out the coordinates for a
+ * given screen, use the functions in Screen. Beware that a window can get stale
+ * if you keep a reference to it and it is for instance closed while you do so.
+ */
+declare var Window: {
   /**
    * Returns the focused window for the currently active app, can be undefined
    * if no window is focused currently.
@@ -462,37 +516,25 @@ interface WindowObject {
   /**
    * Returns all windows in screens if no optionals are given.
    */
-  all(optionals?: {visible?: boolean}): Window[];
+  all(options?: {visible?: boolean}): Window[];
   /**
    * Returns all visible windows in the order as they appear on the screen (from
    * front to back), essentially returning them in the most-recently-used order.
    */
   recent(): Window[];
-}
-
-/**
- * Use the Window-object to control windows. Every screen (i.e. display)
- * combines to form a large rectangle. Every window lives within this rectangle
- * and their position can be altered by giving coordinates inside this
- * rectangle.
- * To position a window to a specific display, you need to calculate its
- * position within the large rectangle. To figure out the coordinates for a
- * given screen, use the functions in Screen. Beware that a window can get stale
- * if you keep a reference to it and it is for instance closed while you do so.
- */
-declare var Window: WindowObject;
+};
 
 interface Key extends Phoenix.Identifiable {
   /**
    * Read-only property for the key character in lower case or case sensitive
    * special key.
    */
-  key: string;
+  readonly key: string;
 
   /**
    * Read-only property for the key modifiers in lower case.
    */
-  modifiers: string[];
+  readonly modifiers: string[];
 
   /**
    * Returns true if the key handler is enabled, by default true.
@@ -511,22 +553,28 @@ interface Key extends Phoenix.Identifiable {
   disable(): boolean;
 }
 
-interface KeyConstructor {
+/**
+ * Use the Key-object to construct keys, access their properties, and enable or
+ * disable them. You can have multiple handlers for a single key combination,
+ * however only one can be enabled at a time. Enabling a key combination that
+ * has been exclusively registered by another app will fail.
+ */
+declare var Key: {
   /**
    * Constructs and binds the key character with the specified modifiers (can be
-   * an empty list) to a callback function and returns the handler (undefined if
-   * not supported), you must keep a reference to the handler in order for your
-   * callback to get called, you can have multiple handlers for a single key
-   * combination, however only one can be enabled at a time, any previous
-   * handler for the same key combination will automatically be disabled, the
-   * callback function receives its handler as the only argument.
+   * an empty list) to a callback function and returns the handler, you must
+   * keep a reference to the handler in order for your callback to get called,
+   * you can have multiple handlers for a single key combination, only one can
+   * be enabled at a time, any previous handler for the same key combination
+   * will automatically be disabled, the callback function receives its handler
+   * as the first argument and as the second argument a boolean that indicates
+   * if the key was repeated (key combination is held down).
    */
   new (
     key: Phoenix.KeyIdentifier,
     modifiers: Phoenix.ModifierKey[],
     callback: Phoenix.KeyCallback
-  ): Key | undefined;
-  prototype: Key;
+  ): Key;
 
   /**
    * Constructs a managed handler for a key and returns the identifier for the
@@ -541,54 +589,57 @@ interface KeyConstructor {
    * Disables the managed handler for a key with the given identifier.
    */
   off(identifier: number): void;
-}
-
-/**
- * Use the Key-object to enable or disable keys. You can have multiple handlers
- * for a single key combination, however only one can be enabled at a time. A
- * key is disabled automatically when you release your reference to the handler.
- * Keys are always reset on context reload. Enabling a key combination that has
- * been exclusively registered by another app will fail.
- */
-declare var Key: KeyConstructor;
+};
 
 interface Event extends Phoenix.Identifiable {
   /**
    * Read-only property for the event name.
    */
-  name: string;
+  readonly name: string;
+
+  /**
+   * Disable the event handler.
+   */
+  disable(): void;
 }
 
-interface EventConstructor {
+/**
+ * Use the Event-object to construct events, access their properties or to
+ * disable them. You can have multiple handlers for a single event.
+ */
+declare var Event: {
   /**
    * Constructs and binds an event to a callback function and returns the
-   * handler (undefined if not supported), you must keep a reference to the
-   * handler in order for your callback to get called, you can have multiple
-   * handlers for a single event, the callback function receives its handler as
-   * the last argument, for any additional arguments see events
+   * handler, you must keep a reference to the handler in order for your
+   * callback to get called, you can have multiple handlers for a single event,
+   * the callback function receives its handler as the last argument, for any
+   * additional arguments see events
    */
-  new (event: Phoenix.Event, callback: (handler: Event) => void):
-    | Event
-    | undefined;
+  new (
+    event: Phoenix.Event | Phoenix.ScreenEvent | Phoenix.SpaceEvent,
+    callback: (handler: Event) => void
+  ): Event;
   new (
     event: Phoenix.AppEvent,
     callback: (target: App, handler: Event) => void
-  ): Event | undefined;
+  ): Event;
   new (
     event: Phoenix.MouseEvent,
     callback: (target: Point, handler: Event) => void
-  ): Event | undefined;
+  ): Event;
   new (
     event: Phoenix.WindowEvent,
     callback: (target: Window, handler: Event) => void
-  ): Event | undefined;
-  prototype: Event;
+  ): Event;
 
   /**
    * Constructs a managed handler for an event and returns the identifier for
    * the handler.
    */
-  on(event: Phoenix.Event, callback: (handler: Event) => void): number;
+  on(
+    event: Phoenix.Event | Phoenix.ScreenEvent | Phoenix.SpaceEvent,
+    callback: (handler: Event) => void
+  ): number;
   on(
     event: Phoenix.AppEvent,
     callback: (target: App, handler: Event) => void
@@ -605,14 +656,7 @@ interface EventConstructor {
    * Disables the managed handler for an event with the given identifier.
    */
   off(identifier: number): void;
-}
-
-/**
- * Use the Event-object to access event properties. You can have multiple
- * handlers for a single event. To disable an event, release your reference to
- * the handler. Events are always reset on context reload.
- */
-declare var Event: EventConstructor;
+};
 
 interface Timer extends Phoenix.Identifiable {
   /**
@@ -621,7 +665,11 @@ interface Timer extends Phoenix.Identifiable {
   stop(): void;
 }
 
-interface TimerConstructor {
+/**
+ * Use the Timer-object to construct and control timers. A timer can fire only
+ * once or be repeating.
+ */
+declare var Timer: {
   /**
    * Constructs a timer that fires the callback once or repeatedly until stopped
    * with the given interval (in seconds) and returns the handler, you must keep
@@ -629,7 +677,6 @@ interface TimerConstructor {
    * callback function receives its handler as the only argument.
    */
   new (interval: number, callback: (handler: Timer) => void): Timer;
-  prototype: Timer;
 
   /**
    * Constructs a managed handler for a timer that fires only once and returns
@@ -645,50 +692,53 @@ interface TimerConstructor {
    * Disables the managed handler for a timer with the given identifier.
    */
   off(identifier: number): void;
-}
-
-declare var Timer: TimerConstructor;
+};
 
 interface Task extends Phoenix.Identifiable {
   /**
    * Read-only property for the termination status.
    */
-  status: number;
+  readonly status: number;
   /**
    * Read-only property for the standard output.
    */
-  output: string;
+  readonly output: string;
   /**
    * Read-only property for the standard error.
    */
-  error: string;
+  readonly error: string;
+
+  /**
+   * Terminate the task immediately.
+   */
+  terminate(): void;
 }
 
-interface TaskConstructor {
+/**
+ * Use the Task-object to construct tasks, access their properties or to
+ * terminate them. Beware that some task properties are only set after the task
+ * has completed.
+ */
+declare var Task: {
   /**
    * Constructs a task that asynchronously executes.
    */
-  new (path: string, args: string[], callback?: (task: Task) => void): Task;
-  prototype: Task;
+  new (path: string, args: string[], callback: (task: Task) => void): Task;
 
   /**
    * Constructs a managed handler for a task and returns the identifier.
    */
-  run(path: string, args: string[], callback?: (task: Task) => void): number;
+  run(path: string, args: string[], callback: (task: Task) => void): number;
   /**
    * Terminates the managed handler for a task with the given identifier.
    */
   terminate(identifier: number): void;
-}
+};
 
 /**
- * Use the Task-object to access task properties. To terminate a task, release
- * your reference to the handler. Tasks are always reset on context reload.
- * Beware that some task properties are only set after the task has completed.
+ * Use the Storage-object to store values across reloads and reboots as JSON.
  */
-declare var Task: TaskConstructor;
-
-interface Storage {
+declare var Storage: {
   /**
    * Stores the value for the key, any previously set value with the same key
    * will be overridden.
@@ -705,11 +755,12 @@ interface Storage {
    * Removes the key and the value associated with it.
    */
   remove(key: string): void;
-}
+};
 
-declare var Storage: Storage;
-
-interface Phoenix {
+/**
+ * Use the Phoenix-object for API-level tasks.
+ */
+declare var Phoenix: {
   /**
    * Manually reloads the context and any changes in the configuration files.
    */
@@ -730,12 +781,7 @@ interface Phoenix {
    * Delivers the message to the Notification Center.
    */
   notify(message: string): void;
-}
-
-/**
- * Use the Phoenix-object for API-level tasks.
- */
-declare var Phoenix: Phoenix;
+};
 
 declare namespace Phoenix {
   interface Preferences {
@@ -752,45 +798,16 @@ declare namespace Phoenix {
 
   interface Icon {}
 
-  interface ModalProperties {
-    /**
-     * Property for the duration (in seconds) for the modal, if the duration is
-     * set to 0 the modal will remain open until closed, by default 0.
-     */
-    duration?: number;
-
-    /**
-     * Dynamic property for the weight of the modal (in points), by default `24`.
-     */
-    weight?: number;
-
-    /**
-     * Property for the appearance of the modal, by default `dark`.
-     */
-    appearance?: 'dark' | 'light' | 'transparent';
-
-    /**
-     * Dynamic property for the icon displayed in the modal.
-     */
-    icon?: Phoenix.Icon;
-
-    /**
-     * Dynamic property for the text displayed in the modal.
-     */
-    text?: string;
-  }
-
-  interface ModalBuilder extends ModalProperties {
-    origin?(frame: Rectangle): Point;
+  interface ReadonlyPoint {
+    readonly x: number;
+    readonly y: number;
   }
 
   type Direction = 'west' | 'east' | 'north' | 'south';
 
-  type Event =
-    | 'didLaunch'
-    | 'willTerminate'
-    | 'screensDidChange'
-    | 'spaceDidChange';
+  type Event = 'didLaunch' | 'willTerminate';
+  type ScreenEvent = 'screensDidChange';
+  type SpaceEvent = 'spaceDidChange';
   type MouseEvent =
     | 'mouseDidMove'
     | 'mouseDidMove'
@@ -886,7 +903,7 @@ declare namespace Phoenix {
    */
   interface Identifiable {
     hash(): number;
-    isEqual(object: Object): boolean;
+    isEqual(object: any): boolean;
   }
 
   /**
