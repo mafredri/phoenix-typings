@@ -585,7 +585,7 @@ interface KeyObject {
   new (
     key: Phoenix.KeyIdentifier,
     modifiers: Phoenix.ModifierKey[],
-    callback: Phoenix.KeyCallback
+    callback: (handler: Key, repeated: boolean) => void
   ): Key;
   prototype: Key;
 
@@ -596,7 +596,7 @@ interface KeyObject {
   on(
     key: Phoenix.KeyIdentifier,
     modifiers: Phoenix.ModifierKey[],
-    callback: Phoenix.KeyCallback
+    callback: (handler: Key, repeated: boolean) => void
   ): number;
   /**
    * Disables the managed handler for a key with the given identifier.
@@ -933,8 +933,6 @@ declare namespace Phoenix {
     | 'keypad7'
     | 'keypad8'
     | 'keypad9';
-
-  type KeyCallback = (handler: Key, repeated: boolean) => void;
 
   /**
    * Objects that implement Identifiable can be identified and compared.
