@@ -28,13 +28,39 @@ interface Size {
  */
 interface Rectangle extends Point, Size {}
 
-interface Modal extends Phoenix.ModalProperties, Phoenix.Identifiable {
+interface Modal extends Phoenix.Identifiable {
   /**
    * Dynamic property for the origin of the modal, the enclosed properties are
    * read-only so you must pass an object for this property, bottom-left based
    * origin, by default `(0, 0)`.
    */
   origin: Phoenix.ReadonlyPoint;
+
+  /**
+   * Property for the duration (in seconds) for the modal, if the duration is
+   * set to 0 the modal will remain open until closed, by default 0.
+   */
+  duration: number;
+
+  /**
+   * Dynamic property for the weight of the modal (in points), by default `24`.
+   */
+  weight: number;
+
+  /**
+   * Property for the appearance of the modal, by default `dark`.
+   */
+  appearance: Phoenix.ModalAppearance;
+
+  /**
+   * Dynamic property for the icon displayed in the modal.
+   */
+  icon: Phoenix.Icon | undefined;
+
+  /**
+   * Dynamic property for the text displayed in the modal.
+   */
+  text: string;
 
   /**
    * Returns the frame for the modal, the frame is adjusted for the current
@@ -57,7 +83,42 @@ interface ModalConstructor {
   new (): Modal;
   prototype: Modal;
 
-  build(properties: Phoenix.ModalBuilder): Modal;
+  /**
+   * Builds a modal with the specified properties and returns it.
+   */
+  build(properties: {
+    /**
+     * Function that receives the frame for the modal and returns a Point which
+     * will be set as the origin for the modal.
+     */
+    origin?(frame: Rectangle): Point;
+
+    /**
+     * Property for the duration (in seconds) for the modal, if the duration is
+     * set to 0 the modal will remain open until closed, by default 0.
+     */
+    duration?: number;
+
+    /**
+     * Dynamic property for the weight of the modal (in points), by default `24`.
+     */
+    weight?: number;
+
+    /**
+     * Property for the appearance of the modal, by default `dark`.
+     */
+    appearance?: Phoenix.ModalAppearance;
+
+    /**
+     * Dynamic property for the icon displayed in the modal.
+     */
+    icon?: Phoenix.Icon;
+
+    /**
+     * Dynamic property for the text displayed in the modal.
+     */
+    text?: string;
+  }): Modal;
 }
 
 /**
@@ -757,37 +818,7 @@ declare namespace Phoenix {
     readonly y: number;
   }
 
-  interface ModalProperties {
-    /**
-     * Property for the duration (in seconds) for the modal, if the duration is
-     * set to 0 the modal will remain open until closed, by default 0.
-     */
-    duration?: number;
-
-    /**
-     * Dynamic property for the weight of the modal (in points), by default `24`.
-     */
-    weight?: number;
-
-    /**
-     * Property for the appearance of the modal, by default `dark`.
-     */
-    appearance?: 'dark' | 'light' | 'transparent';
-
-    /**
-     * Dynamic property for the icon displayed in the modal.
-     */
-    icon?: Phoenix.Icon;
-
-    /**
-     * Dynamic property for the text displayed in the modal.
-     */
-    text?: string;
-  }
-
-  interface ModalBuilder extends ModalProperties {
-    origin?(frame: Rectangle): Point;
-  }
+  type ModalAppearance = 'dark' | 'light' | 'transparent';
 
   type Direction = 'west' | 'east' | 'north' | 'south';
 
