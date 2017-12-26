@@ -503,6 +503,11 @@ interface Window extends Phoenix.Identifiable {
    * if successful.
    */
   focusClosestNeighbor(direction: Phoenix.Direction): boolean;
+
+  /**
+   * Closes the window, returns `true` if successful.
+   */
+  close(): boolean;
 }
 
 interface WindowObject {
