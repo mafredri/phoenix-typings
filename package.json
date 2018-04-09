@@ -11,15 +11,22 @@
   "repository": "mafredri/phoenix-typings",
   "typings": "index.d.ts",
   "scripts": {
-    "format": "prettier --write --no-bracket-spacing --single-quote --trailing-comma es5 *.ts"
+    "format": "prettier --write *.ts *.json"
   },
   "devDependencies": {
-    "onchange": "^3.2.1",
-    "prettier": "^1.5.2",
-    "tslint": "^5.1.0",
+    "onchange": "^3.3.0",
+    "prettier": "^1.11.1",
+    "tslint": "^5.9.1",
     "tslint-config-typings": "^0.3.1",
-    "typescript": "^2.2.2",
+    "typescript": "^2.8.1",
     "typings": "^2.1.1"
   },
-  "typeScriptVersion": "2.0"
+  "typeScriptVersion": "2.0",
+  "prettier": {
+    "tabWidth": 2,
+    "useTabs": false,
+    "singleQuote": true,
+    "bracketSpacing": false,
+    "trailingComma": "es5"
+  }
 }
