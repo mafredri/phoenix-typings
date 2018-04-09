@@ -607,6 +607,18 @@ interface KeyObject {
    * Disables the managed handler for a key with the given identifier.
    */
   off(identifier: number): void;
+
+  /**
+   * Constructs a managed handler for a key that is by default only triggered
+   * one time and then disabled, for more control you can explicitly return
+   * `false` from the callback function and the handler will not be disabled
+   * until you return something else, for arguments see `new Key(...)`.
+   */
+  once(
+    key: Phoenix.KeyIdentifier,
+    modifiers: Phoenix.ModifierKey[],
+    callback: (handler: Key, repeated: boolean) => void
+  );
 }
 
 /**
@@ -636,7 +648,7 @@ interface EventObject {
    * handler (undefined if not supported), you must keep a reference to the
    * handler in order for your callback to get called, you can have multiple
    * handlers for a single event, the callback function receives its handler as
-   * the last argument, for any additional arguments see events
+   * the last argument, for any additional arguments see events.
    */
   new (event: Phoenix.Event, callback: (handler: Event) => void): Event;
   new (
@@ -674,6 +686,26 @@ interface EventObject {
    * Disables the managed handler for an event with the given identifier.
    */
   off(identifier: number): void;
+
+  /**
+   * Constructs a managed handler for an event that is by default only triggered
+   * one time and then disabled, for more control you can explicitly return
+   * `false` from the callback function and the handler will not be disabled
+   * until you return something else, for arguments see `new Event(...)`.
+   */
+  once(event: Phoenix.Event, callback: (handler: Event) => void);
+  once(
+    event: Phoenix.AppEvent,
+    callback: (target: App, handler: Event) => void
+  );
+  once(
+    event: Phoenix.MouseEvent,
+    callback: (target: Point, handler: Event) => void
+  );
+  once(
+    event: Phoenix.WindowEvent,
+    callback: (target: Window, handler: Event) => void
+  );
 }
 
 /**
