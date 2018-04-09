@@ -40,4 +40,4 @@ Here's a simple example `tsconfig.json`:
 }
 ```
 
-**NOTE:** Phoenix does not support CommonJS type of `require`. In order to use `require` or ES2015 style `import`, webpack is highly recommended. For an example on how to set up webpack, see [mafredri/phoenix-config](https://github.com/mafredri/phoenix-config) with it's [`webpack.config.js`](https://github.com/mafredri/phoenix-config/blob/1887b57cdce1410f26f6f99e215d83a4ee1fb72a/webpack.config.js) and [`tsconfig.json`](https://github.com/mafredri/phoenix-config/blob/1887b57cdce1410f26f6f99e215d83a4ee1fb72a/tsconfig.json). Requires `webpack` and `ts-loader`.
+**NOTE:** Phoenix does not support CommonJS type of `require`. In order to use `require` or ES2015 style `import`, webpack is highly recommended. For an example on how to set up webpack, see [mafredri/phoenix-config](https://github.com/mafredri/phoenix-config) with it's [`webpack.config.js`](https://github.com/mafredri/phoenix-config/blob/79630ff789384e596ce7c008ad0b3c3a302c2c6b/webpack.config.js) and [`tsconfig.json`](https://github.com/mafredri/phoenix-config/blob/79630ff789384e596ce7c008ad0b3c3a302c2c6b/tsconfig.json). Requires `webpack` and `ts-loader`.
