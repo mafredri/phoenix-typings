@@ -358,7 +358,7 @@ interface AppObject {
    * Launches to the background and returns the app with the given name, returns
    * undefined if unsuccessful.
    */
-  launch(appName: string): App | undefined;
+  launch(appName: string, optionals?: {focus: boolean}): App | undefined;
 
   /**
    * Returns the focused app.
