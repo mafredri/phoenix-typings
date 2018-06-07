@@ -43,6 +43,13 @@ interface Modal extends Phoenix.Identifiable {
   duration: number;
 
   /**
+   * Property for the animation duration (in seconds) for opening and closing
+   * the modal, if the duration is set to `0` the animation will be disabled, by
+   * default `0.2`.
+   */
+  animationDuration: number;
+
+  /**
    * Dynamic property for the weight of the modal (in points), by default `24`.
    */
   weight: number;
