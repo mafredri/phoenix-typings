@@ -914,7 +914,14 @@ declare namespace Phoenix {
     | 'windowDidMinimise'
     | 'windowDidUnminimise';
 
-  type ModifierKey = 'cmd' | 'alt' | 'ctrl' | 'shift';
+  type ModifierKey =
+    | 'command'
+    | 'option'
+    | 'control'
+    | 'cmd'
+    | 'alt'
+    | 'ctrl'
+    | 'shift';
 
   /**
    * A key can be any key on your local keyboard layout, for instance an
