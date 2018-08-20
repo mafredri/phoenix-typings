@@ -624,8 +624,8 @@ interface KeyObject {
   once(
     key: Phoenix.KeyIdentifier,
     modifiers: Phoenix.ModifierKey[],
-    callback: (handler: Key, repeated: boolean) => void
-  );
+    callback: (handler: Key, repeated: boolean) => false | any
+  ): void;
 }
 
 /**
@@ -700,19 +700,19 @@ interface EventObject {
    * `false` from the callback function and the handler will not be disabled
    * until you return something else, for arguments see `new Event(...)`.
    */
-  once(event: Phoenix.Event, callback: (handler: Event) => void);
+  once(event: Phoenix.Event, callback: (handler: Event) => false | any): void;
   once(
     event: Phoenix.AppEvent,
-    callback: (target: App, handler: Event) => void
-  );
+    callback: (target: App, handler: Event) => false | any
+  ): void;
   once(
     event: Phoenix.MouseEvent,
-    callback: (target: Point, handler: Event) => void
-  );
+    callback: (target: Point, handler: Event) => false | any
+  ): void;
   once(
     event: Phoenix.WindowEvent,
-    callback: (target: Window, handler: Event) => void
-  );
+    callback: (target: Window, handler: Event) => false | any
+  ): void;
 }
 
 /**
