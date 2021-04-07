@@ -28,6 +28,24 @@ interface Size {
  */
 interface Rectangle extends Point, Size {}
 
+/**
+ * Image represents an image that can e.g. be used in a modal.
+ */
+type Image = Phoenix.Icon;
+
+interface ImageObject {
+  /**
+   * Loads an image from the given path, the path is resolved before attempting
+   * to load the image, returns `undefined` if unsuccessful.
+   */
+  fromFile(path: string): Image;
+}
+
+/**
+ * Use the `Image`-object to construct images.
+ */
+declare var Image: ImageObject;
+
 interface Modal extends Phoenix.Identifiable {
   /**
    * Dynamic property for the origin of the modal, the enclosed properties are
@@ -43,7 +61,7 @@ interface Modal extends Phoenix.Identifiable {
   duration: number;
 
   /**
-   * Property for the animation duration (in seconds) for opening and closing
+   * Property for the animation duration (in seconds) for showing and closing
    * the modal, if the duration is set to `0` the animation will be disabled, by
    * default `0.2`.
    */
@@ -62,7 +80,7 @@ interface Modal extends Phoenix.Identifiable {
   /**
    * Dynamic property for the icon displayed in the modal.
    */
-  icon: Phoenix.Icon | undefined;
+  icon: Image | undefined;
 
   /**
    * Dynamic property for the text displayed in the modal.
@@ -119,7 +137,7 @@ interface ModalObject {
     /**
      * Dynamic property for the icon displayed in the modal.
      */
-    icon?: Phoenix.Icon;
+    icon?: Image;
 
     /**
      * Dynamic property for the text displayed in the modal.
@@ -297,7 +315,7 @@ interface App extends Phoenix.Identifiable {
   /**
    * Returns the app icon.
    */
-  icon(): Phoenix.Icon;
+  icon(): Image;
 
   /**
    * Returns true if the app is currently frontmost.
@@ -315,9 +333,10 @@ interface App extends Phoenix.Identifiable {
   isTerminated(): boolean;
 
   /**
-   * Returns the main window for the app.
+   * Returns the main window for the app, returns `undefined` if the app does
+   * not currently have a main window.
    */
-  mainWindow(): Window;
+  mainWindow(): Window | undefined;
 
   /**
    * Returns all windows for the app if no optionals are given.
@@ -352,6 +371,14 @@ interface App extends Phoenix.Identifiable {
   terminate(options?: {force?: boolean}): boolean;
 }
 
+interface LaunchOptionals {
+  /**
+   * If set `true`, the launched app will be automatically focused. You don't
+   * need to call app.focus() to bring it forward.
+   */
+  focus?: boolean;
+}
+
 interface AppObject {
   prototype: App;
 
@@ -365,7 +392,7 @@ interface AppObject {
    * Launches to the background and returns the app with the given name, returns
    * undefined if unsuccessful.
    */
-  launch(appName: string, optionals?: {focus?: boolean}): App | undefined;
+  launch(appName: string, optionals?: LaunchOptionals): App | undefined;
 
   /**
    * Returns the focused app.
@@ -649,6 +676,13 @@ interface Event extends Phoenix.Identifiable {
   disable(): void;
 }
 
+interface MousePoint extends Point {
+  /**
+   * Contains the key modifiers pressed when the mouse event is triggered.
+   */
+  readonly modifiers: string[];
+}
+
 interface EventObject {
   /**
    * Constructs and binds an event to a callback function and returns the
@@ -664,7 +698,7 @@ interface EventObject {
   ): Event;
   new (
     event: Phoenix.MouseEvent,
-    callback: (target: Point, handler: Event) => void
+    callback: (target: MousePoint, handler: Event) => void
   ): Event;
   new (
     event: Phoenix.WindowEvent,
@@ -683,7 +717,7 @@ interface EventObject {
   ): number;
   on(
     event: Phoenix.MouseEvent,
-    callback: (target: Point, handler: Event) => void
+    callback: (target: MousePoint, handler: Event) => void
   ): number;
   on(
     event: Phoenix.WindowEvent,
@@ -707,7 +741,7 @@ interface EventObject {
   ): void;
   once(
     event: Phoenix.MouseEvent,
-    callback: (target: Point, handler: Event) => false | any
+    callback: (target: MousePoint, handler: Event) => false | any
   ): void;
   once(
     event: Phoenix.WindowEvent,
@@ -835,9 +869,11 @@ interface Phoenix {
   set(preferences: Phoenix.Preferences): void;
 
   /**
-   * Logs the message to the console.
+   * Logs the arguments to the Console (app).
+   *
+   * If the first argument is an error, the stack trace will be logged.
    */
-  log(...message: any[]): void;
+  log(...arguments: any[]): void;
 
   /**
    * Delivers the message to the Notification Center.
@@ -874,7 +910,10 @@ declare namespace Phoenix {
     openAtLogin?: boolean;
   }
 
-  interface Icon {}
+  /**
+   * Icon is deprecated, use Image instead.
+   */
+  interface Icon extends Phoenix.Identifiable {}
 
   interface ReadonlyPoint {
     readonly x: number;
@@ -916,10 +955,10 @@ declare namespace Phoenix {
 
   type ModifierKey =
     | 'command'
-    | 'option'
-    | 'control'
     | 'cmd'
+    | 'option'
     | 'alt'
+    | 'control'
     | 'ctrl'
     | 'shift';
 
