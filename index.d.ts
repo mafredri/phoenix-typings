@@ -870,10 +870,13 @@ interface Phoenix {
 
   /**
    * Logs the arguments to the Console (app).
-   *
-   * If the first argument is an error, the stack trace will be logged.
    */
   log(...arguments: any[]): void;
+
+  /**
+   * Logs the error and stack trace to the Console (app).
+   */
+  log(err: Error): void;
 
   /**
    * Delivers the message to the Notification Center.
