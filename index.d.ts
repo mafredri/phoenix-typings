@@ -544,12 +544,12 @@ interface Key extends Phoenix.Identifiable {
    * Read-only property for the key character in lower case or case sensitive
    * special key.
    */
-  readonly key: string;
+  readonly key: Phoenix.KeyIdentifier;
 
   /**
    * Read-only property for the key modifiers in lower case.
    */
-  readonly modifiers: string[];
+  readonly modifiers: Phoenix.ModifierKey[];
 
   /**
    * Returns true if the key handler is enabled, by default true.
@@ -621,6 +621,13 @@ interface KeyObject {
  */
 declare var Key: KeyObject;
 
+interface MousePoint extends Point {
+  /**
+   * Contains the key modifiers pressed when the mouse event is triggered.
+   */
+  readonly modifiers: Phoenix.ModifierKey[];
+}
+
 interface Event extends Phoenix.Identifiable {
   /**
    * Read-only property for the event name.
@@ -631,13 +638,6 @@ interface Event extends Phoenix.Identifiable {
    * Disable the event handler.
    */
   disable(): void;
-}
-
-interface MousePoint extends Point {
-  /**
-   * Contains the key modifiers pressed when the mouse event is triggered.
-   */
-  readonly modifiers: string[];
 }
 
 interface EventObject {
@@ -1009,8 +1009,9 @@ declare namespace Phoenix {
    * A key can be any key on your local keyboard layout, for instance an
    * å-character if your keyboard has one.
    */
-  type KeyIdentifier =
-    | string
+  type KeyIdentifier = string | SpecialKey;
+
+  type SpecialKey =
     // Action keys
     | 'return'
     | 'tab'
