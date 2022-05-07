@@ -1,14 +1,14 @@
 {
-  "name": "phoenix-typings",
-  "version": "1.0.0",
+  "name": "@types/phoenix",
+  "version": "3.0.0",
   "license": "MIT",
   "author": {
     "name": "Mathias Fredriksson",
     "email": "mafredri@gmail.com",
-    "url": "mathias.fi"
+    "url": "https://mathias.fi"
   },
   "main": "",
-  "repository": "mafredri/phoenix-typings",
+  "repository": "https://github.com/mafredri/phoenix-typings",
   "typings": "index.d.ts",
   "scripts": {
     "format": "prettier --write *.ts *.json"
