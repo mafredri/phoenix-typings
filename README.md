@@ -6,33 +6,27 @@
 
 ```
 # Inside project
-npm install --save typescript typings
-./node_modules/.bin/typings init
-./node_modules/.bin/typings install github:mafredri/phoenix-typings --global --save
+yarn add 'github:mafredri/phoenix-typings#main'
 ```
 
 ## Using
 
-Once `phoenix-typings` has been installed they are ready to be used with a correctly configued `tsconfig.json`. Care should be taken not to enable the TypeScript DOM library.
+Once `phoenix-typings` has been installed they are ready to be used with a correctly configured `tsconfig.json`. Care should be taken not to enable the TypeScript DOM library.
 
 Here's a simple example `tsconfig.json`:
 
 ```json
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "module": "ESNext",
+    "moduleResolution": "Node",
     "baseUrl": "src",
     "outDir": "out",
-    "target": "es2015",
+    "target": "ES2021",
     "strict": true,
-    "typeRoots": [
-      "node_modules/@types",
-      "typings/globals"
-    ],
-    "lib": [
-      "es2017"
-    ]
+    "types": ["phoenix"],
+    "typeRoots": ["node_modules/@types"],
+    "lib": ["ES2021"]
   },
   "exclude": [
     "node_modules"
