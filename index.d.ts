@@ -46,50 +46,19 @@ interface ImageObject {
  */
 declare var Image: ImageObject;
 
-interface Modal extends Phoenix.Identifiable {
+interface Modal extends Phoenix.ModalProperties, Phoenix.Identifiable {
   /**
    * Dynamic property for the origin of the modal, the enclosed properties are
    * read-only so you must pass an object for this property, bottom-left based
    * origin, by default `(0, 0)`.
    */
-  origin: Phoenix.ReadonlyPoint;
-
-  /**
-   * Property for the duration (in seconds) for the modal, if the duration is
-   * set to 0 the modal will remain open until closed, by default 0.
-   */
-  duration: number;
-
-  /**
-   * Property for the animation duration (in seconds) for showing and closing
-   * the modal, if the duration is set to `0` the animation will be disabled, by
-   * default `0.2`.
-   */
-  animationDuration: number;
-
-  /**
-   * Dynamic property for the weight of the modal (in points), by default `24`.
-   */
-  weight: number;
-
-  /**
-   * Property for the appearance of the modal, by default `dark`.
-   */
-  appearance: Phoenix.ModalAppearance;
-
-  /**
-   * Dynamic property for the icon displayed in the modal.
-   */
-  icon: Image | undefined;
-
-  /**
-   * Dynamic property for the text displayed in the modal.
-   */
-  text: string;
+  origin: Readonly<Point>;
 
   /**
    * Returns the frame for the modal, the frame is adjusted for the current
-   * message, therefor you must first set the message to get an accurate frame.
+   * content, therefore you must first set the weight, icon and text to get an
+   * accurate frame, an input modal has a fixed width of 600, bottom left based
+   * origin.
    */
   frame(): Rectangle;
 
@@ -102,6 +71,13 @@ interface Modal extends Phoenix.Identifiable {
    * Closes the modal.
    */
   close(): void;
+
+  /**
+   * Sets a custom text colour with the given RGBA values, for example
+   * `setTextColor(34, 139, 34, 1)`.
+   */
+  setTextColor(red: number, green: number, blue: number, alpha: number): void;
+  setTextColour(red: number, green: number, blue: number, alpha: number): void;
 }
 
 interface ModalObject {
@@ -111,39 +87,15 @@ interface ModalObject {
   /**
    * Builds a modal with the specified properties and returns it.
    */
-  build(properties: {
-    /**
-     * Function that receives the frame for the modal and returns a Point which
-     * will be set as the origin for the modal.
-     */
-    origin?(frame: Rectangle): Point;
-
-    /**
-     * Property for the duration (in seconds) for the modal, if the duration is
-     * set to 0 the modal will remain open until closed, by default 0.
-     */
-    duration?: number;
-
-    /**
-     * Dynamic property for the weight of the modal (in points), by default `24`.
-     */
-    weight?: number;
-
-    /**
-     * Property for the appearance of the modal, by default `dark`.
-     */
-    appearance?: Phoenix.ModalAppearance;
-
-    /**
-     * Dynamic property for the icon displayed in the modal.
-     */
-    icon?: Image;
-
-    /**
-     * Dynamic property for the text displayed in the modal.
-     */
-    text?: string;
-  }): Modal;
+  build(
+    properties: Partial<Phoenix.ModalProperties> & {
+      /**
+       * Function that receives the frame for the modal and returns a Point
+       * which will be set as the origin for the modal.
+       */
+      origin?(frame: Rectangle): Point;
+    }
+  ): Modal;
 }
 
 /**
@@ -918,12 +870,75 @@ declare namespace Phoenix {
    */
   interface Icon extends Phoenix.Identifiable {}
 
-  interface ReadonlyPoint {
-    readonly x: number;
-    readonly y: number;
+  interface ModalProperties {
+    /**
+     * Property for the duration (in seconds) for the modal, if the duration is
+     * set to 0 the modal will remain open until closed, by default 0.
+     */
+    duration: number;
+
+    /**
+     * Property for the animation duration (in seconds) for showing and closing
+     * the modal, if the duration is set to `0` the animation will be disabled, by
+     * default `0.2`.
+     */
+    animationDuration: number;
+
+    /**
+     * Dynamic property for the weight of the modal (in points), by default `24`.
+     */
+    weight: number;
+
+    /**
+     * Property for the appearance of the modal, by default `dark`.
+     */
+    appearance: Phoenix.ModalAppearance;
+
+    /**
+     * Property for whether the modal has a shadow, by default `true`.
+     */
+    hasShadow: boolean;
+
+    /**
+     * Dynamic property for the icon displayed in the modal.
+     */
+    icon: Image | undefined;
+
+    /**
+     * Dynamic property for the text displayed in the modal.
+     */
+    text: string;
+
+    /**
+     * Property for the alignment of the text, by default `left`.
+     */
+    textAlignment: Phoenix.TextAlignment;
+
+    /**
+     * Dynamic property for the font name used for the text, by default `System`.
+     */
+    font: string;
+
+    /**
+     * Property for whether the modal behaves as an input modal, by default `false`.
+     */
+    isInput: boolean;
+
+    /**
+     * Property for the placeholder string that will be displayed when the input
+     * is empty, by default empty.
+     */
+    inputPlaceholder: string;
+
+    /**
+     * Callback function to call when the input modal’s text field value changes,
+     * receives the value as the first argument for the callback.
+     */
+    textDidChange(value: string): void;
   }
 
   type ModalAppearance = 'dark' | 'light' | 'transparent';
+  type TextAlignment = 'left' | 'right' | 'centre' | 'center';
 
   type Direction = 'west' | 'east' | 'north' | 'south';
 

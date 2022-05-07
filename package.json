@@ -26,5 +26,8 @@
     "singleQuote": true,
     "bracketSpacing": false,
     "trailingComma": "es5"
+  },
+  "dependencies": {
+    "utility-types": "^3.10.0"
   }
 }
