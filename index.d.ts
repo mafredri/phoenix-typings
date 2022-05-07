@@ -202,6 +202,11 @@ interface Space extends Phoenix.Identifiable, Phoenix.Iterable<Space> {
    * Removes the given windows from the space.
    */
   removeWindows(windows: Window[]): void;
+
+  /**
+   * Moves the given windows to the space (macOS 10.13+).
+   */
+  moveWindows(windows: Window[]): void;
 }
 
 interface SpaceObject {
@@ -841,6 +846,24 @@ interface Phoenix {
  */
 declare var Phoenix: Phoenix;
 
+/**
+ * You can modularise your configuration using the require function. It will
+ * load the referenced JavaScript file and reload it if any changes are
+ * detected. If the path is relative, it is resolved relatively to the absolute
+ * location of the primary configuration file. If this file is a symlink, it
+ * will be resolved before resolving the location of the required file. If the
+ * file does not exist, require will throw an error.
+ */
+declare function require(path: string): void;
+
+interface console {
+  /**
+   * Alias for Phoenix.log.
+   */
+  log: typeof Phoenix.log;
+}
+declare var console: console;
+
 declare function clearInterval(handle: number): void;
 declare function clearTimeout(handle: number): void;
 declare function setInterval(
@@ -942,11 +965,13 @@ declare namespace Phoenix {
 
   type Direction = 'west' | 'east' | 'north' | 'south';
 
-  type Event =
-    | 'didLaunch'
-    | 'willTerminate'
-    | 'screensDidChange'
-    | 'spaceDidChange';
+  // Events with no additional object passed to callback.
+  type Event = Phoenix | DeviceEvent | ScreenEvent | SpaceEvent;
+  type PhoenixEvent = 'didLaunch' | 'willTerminate';
+  type DeviceEvent = 'deviceWillSleep' | 'deviceDidWake';
+  type ScreenEvent = 'screensDidChange';
+  type SpaceEvent = 'spaceDidChange';
+  // Special events with object passed to callback.
   type MouseEvent =
     | 'mouseDidMove'
     | 'mouseDidMove'
