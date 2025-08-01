@@ -966,7 +966,7 @@ declare namespace Phoenix {
   type Direction = 'west' | 'east' | 'north' | 'south';
 
   // Events with no additional object passed to callback.
-  type Event = Phoenix | DeviceEvent | ScreenEvent | SpaceEvent;
+  type Event = PhoenixEvent | DeviceEvent | ScreenEvent | SpaceEvent;
   type PhoenixEvent = 'didLaunch' | 'willTerminate';
   type DeviceEvent = 'deviceWillSleep' | 'deviceDidWake';
   type ScreenEvent = 'screensDidChange';
