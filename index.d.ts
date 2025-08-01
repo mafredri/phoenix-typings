@@ -1005,14 +1005,7 @@ declare namespace Phoenix {
     | 'ctrl'
     | 'shift';
 
-  /**
-   * A key can be any key on your local keyboard layout, for instance an
-   * å-character if your keyboard has one.
-   */
-  type KeyIdentifier = string | SpecialKey;
-
-  type SpecialKey =
-    // Action keys
+  type ActionKey =
     | 'return'
     | 'tab'
     | 'space'
@@ -1027,8 +1020,9 @@ declare namespace Phoenix {
     | 'left'
     | 'right'
     | 'down'
-    | 'up'
-    // Function keys
+    | 'up';
+
+  type FunctionKey =
     | 'f1'
     | 'f2'
     | 'f3'
@@ -1047,8 +1041,9 @@ declare namespace Phoenix {
     | 'f16'
     | 'f17'
     | 'f18'
-    | 'f19'
-    // Keypad keys
+    | 'f19';
+
+  type KeypadKey =
     | 'keypad.'
     | 'keypad*'
     | 'keypad+'
@@ -1067,6 +1062,14 @@ declare namespace Phoenix {
     | 'keypad7'
     | 'keypad8'
     | 'keypad9';
+
+  type SpecialKey = ActionKey | FunctionKey | KeypadKey;
+
+  /**
+   * A key can be any key on your local keyboard layout, for instance an
+   * å-character if your keyboard has one.
+   */
+  type KeyIdentifier = string | SpecialKey;
 
   /**
    * Objects that implement Identifiable can be identified and compared.
